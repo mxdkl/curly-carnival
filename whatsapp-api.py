@@ -5,8 +5,10 @@ from whatsapp_api_client_python import API
 
 
 # This whatsapp account is "8615101526507@c.us"
+# https://console.green-api.com/instanceList jeeding@outlook.com:NxqSF@XcpEwJq@3
 MAX_NUM = "972533642700@c.us"
 JEE_NUM = "972549486533@c.us"
+# Danil sorry, this free plan of greenapi can only reach 3 accounts every month and I already wasted one, I will try to add your number next month~
 greenAPI = API.GreenApi(
     "7103872531", "3e21f47970a74b72a4756729a84a845eb516178db56c4cd6b5"
 )
@@ -53,14 +55,40 @@ def incoming_message_received(body: dict) -> None:
     timestamp = body["timestamp"]
     time = get_notification_time(timestamp)
 
-    # data = dumps(body, ensure_ascii=False, indent=4)
+    data = dumps(body, ensure_ascii=False, indent=4)
+    # print(data)
 
     sender = body["senderData"]["sender"]
     senderName = body["senderData"]["senderName"]
-    textMessage = body["messageData"]["textMessageData"]["textMessage"]
+    typeMessage = body["messageData"]["typeMessage"]
+    print(f'New incoming message at {time} from {senderName} with {typeMessage}')
 
-    print(f'New incoming message at {time} from {senderName} with message: "{textMessage}"', end='\n\n')
-    greenAPI.sending.sendMessage(sender, "Robot: "+textMessage)
+    if typeMessage == "textMessage" or typeMessage == "extendedTextMessage":
+        if typeMessage == "textMessage":
+            messageData = body["messageData"]["textMessageData"]
+            textMessage = messageData["textMessage"]
+        else:
+            messageData = body["messageData"]["extendedTextMessageData"]
+            textMessage = messageData["text"]
+        print(f'{senderName}: "{textMessage}"', end='\n\n')
+        greenAPI.sending.sendMessage(sender, "Robot: "+textMessage)
+
+    elif typeMessage == "imageMessage" or typeMessage == "videoMessage":
+        messageData = body["messageData"]["fileMessageData"]
+        imageUrl = messageData["downloadUrl"]
+        fileName = messageData["fileName"]
+        caption = messageData["caption"]
+
+        print(f'{senderName}: "{caption}"', end='\n\n')
+        greenAPI.sending.sendFileByUrl(
+            sender,
+            imageUrl,
+            fileName,
+            "Robot: "+ caption
+        )
+
+    # else:
+
 
 
 if __name__ == '__main__':
