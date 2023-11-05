@@ -1,28 +1,36 @@
+import os
+import requests
+import json
+from dotenv import load_dotenv
 from datetime import datetime
-from json import dumps
 from threading import Thread
 from whatsapp_api_client_python import API
 
-
-# This whatsapp account is "8615101526507@c.us"
-# https://console.green-api.com/instanceList jeeding@outlook.com:NxqSF@XcpEwJq@3
-MAX_NUM = "972533642700@c.us"
-JEE_NUM = "972549486533@c.us"
-# Danil sorry, this free plan of greenapi can only reach 3 accounts every month and I already wasted one, I will try to add your number next month~
+load_dotenv()
 greenAPI = API.GreenApi(
-    "7103872531", "3e21f47970a74b72a4756729a84a845eb516178db56c4cd6b5"
+    os.getenv('GREENAPI_ID'), os.getenv('GREENAPI_TOKEN')
 )
 
 
 def main():
-    receiver = MAX_NUM
+    receiver = os.getenv('MAX_NUM')
+    # receiver = os.getenv('JEE_NUM')
     receivingNotificationsThread = Thread(target=receivingNotificationsTask)
     receivingNotificationsThread.daemon = True
     receivingNotificationsThread.start()
 
     while True:
         message = input(f"Reply @{receiver} if you want:\n")
-        greenAPI.sending.sendMessage(receiver, "Human: "+message)
+        url = getAudioFromText(message)
+        if url:
+            fileName = url[url.rfind('/')+1:]
+            greenAPI.sending.sendFileByUrl(
+                receiver,
+                url,
+                fileName,
+            )
+        else:
+            greenAPI.sending.sendMessage(receiver, "Human: "+message)
     
 
 def receivingNotificationsTask() -> None:
@@ -56,7 +64,7 @@ def incoming_message_received(body: dict) -> None:
     time = get_notification_time(timestamp)
 
     data = dumps(body, ensure_ascii=False, indent=4)
-    # print(data)
+    print(data)
 
     sender = body["senderData"]["sender"]
     senderName = body["senderData"]["senderName"]
@@ -87,8 +95,41 @@ def incoming_message_received(body: dict) -> None:
             "Robot: "+ caption
         )
 
-    # else:
+    elif typeMessage == "audioMessage":
+        messageData = body["messageData"]["fileMessageData"]
+        imageUrl = messageData["downloadUrl"]
+        fileName = messageData["fileName"]
 
+        print(f'{senderName}: "{caption}"', end='\n\n')
+        greenAPI.sending.sendFileByUpload(
+            sender,
+            "data/green-api-logo_2.png",
+            "green-api-logo_2.png",
+        )
+
+    # else:
+def getAudioFromText(message: str) -> str:
+    if message:
+        url = "https://api.play.ht/api/v2/tts"
+        payload = {
+            "text": message,
+            "voice": "s3://mockingbird-prod/ayla_vo_expressive_16095e08-b9e8-429b-947c-47a75e41053b/voices/speaker/manifest.json",
+            "output_format": "mp3",
+            "voice_engine": "PlayHT2.0"
+        }
+        headers = {
+            "accept": "text/event-stream",
+            "content-type": "application/json",
+            "AUTHORIZATION": os.getenv('PLAYHT_TOKEN'),
+            "X-USER-ID": os.getenv('PLAYHT_ID')
+        }
+        # print(headers)
+        response = requests.post(url, json=payload, headers=headers)
+
+        # print(response.text)
+        if response.text.rfind("completed"):
+            data=json.loads(response.text[response.text.rfind('{'):])
+            return(data["url"])
 
 
 if __name__ == '__main__':
