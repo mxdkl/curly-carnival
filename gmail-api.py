@@ -45,6 +45,13 @@ def main():
             print('No messages found.')
         else:
             for message in messages:
+                # if email id is in ids.txt pass
+                    # else add to ids.txt and print
+                ids = open('ids.txt', 'r+')
+                if message['id'] in ids.read():
+                    continue
+                else:
+                    ids.write(message['id'] + '\n')
                 msg = service.users().messages().get(userId='me', id=message['id']).execute()
                 message_data = msg['payload']['headers']
                 for data in message_data:

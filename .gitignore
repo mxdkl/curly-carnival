@@ -1,6 +1,7 @@
 # Project spescific
 creds.json
 token.json
+ids.txt
 
 # Byte-compiled / optimized / DLL files
 __pycache__/
