@@ -30,17 +30,14 @@ class OpenAIWrapper:
         return file_ids
     
 class Assistant(OpenAIWrapper):
-    def __init__(self, id):
+    def __init__(self, id, user):
         super().__init__()
         self.id = id
-        self.threads = client.beta.threads.create(
-            messages = [{"role":"user", "content":"Hello, I'm Eve."}]
-        )
-        print(self.threads)
+        self.user = user
+        self.threads = client.beta.threads.create()
 
-    def run(self, message: str, attachments: list = None):
-        # Add user message to thread
-        self._messageHistory(message, attachments)
+    def chat(self, message: str, attachments: list = []):
+        self._createMessage(message, attachments)
 
         # Run assistant
         run = client.beta.threads.runs.create(
@@ -48,22 +45,49 @@ class Assistant(OpenAIWrapper):
             assistant_id = self.id
         )
 
-        # Add assistant response to thread
+        # Wait for assistant to finish. This code jank af
+        while run.status != "completed":
+            if run.status == "requires_action":
+                outputs = []
+                for tool_call in run.required_action.submit_tool_outputs.tool_calls:
+                    # Run function called by assistant here
+                    outputs.append({
+                        "tool_call_id": tool_call.id,
+                        "output": 'true'
+                    })
+                self._submitRunToolOutput(run.id, outputs)
+
+            time.sleep(1)
+            run = self._retrieveRun(run.id)
+            
+        # Retrieve assistant response
+        response = client.beta.threads.messages.list(self.threads.id).data
+        return response
+
+    def _createMessage(self, message, file_ids = []):
+        thread_message = client.beta.threads.messages.create(
+            self.threads.id,
+            role = "user",
+            content = message,
+            file_ids = file_ids
+        )
+        return thread_message
+    
+    def _retrieveRun(self, run_id):
+        run = client.beta.threads.runs.retrieve(
+            thread_id = self.threads.id,
+            run_id = run_id
+        )
         return run
     
-    def _messageHistory(self, message, attachments = None):
-        if not attachments:
-            self.threads += {
-                "role": "user",
-                "content": message
-            }
-        else:
-            file_ids = self._uploadFiles(attachments)
-            self.threads += {
-                "role": "user",
-                "content": message,
-                "file_ids": file_ids
-            }
+    def _submitRunToolOutput(self, run_id, outputs):
+        run = client.beta.threads.runs.submit_tool_outputs(
+            thread_id = self.threads.id,
+            run_id = run_id,
+            tool_outputs = outputs
+        )
+        return run
+    
 
 if __name__ == "__main__":
 
@@ -107,8 +131,9 @@ if __name__ == "__main__":
         }
     ]
 
+    # Create assistant
     #id = OpenAIWrapper.createAssistant(name=name, description=description, instructions=instructions, model=model, tools=tools, files=None)
-    
-    eve = Assistant(os.getenv("ASSISTANT_ID"))
-    print(eve.run("send an email to john doe with the subject hello and the body hello world. john doe's email is john@gmail.com"))
+
+    eve = Assistant(id = os.getenv("ASSISTANT_ID"), user = "test")
+    print(eve.chat("send an email to john doe with the subject hello and the body hello world. john doe's email is john@gmail.com"))
 

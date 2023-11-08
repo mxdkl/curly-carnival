@@ -37,8 +37,10 @@ class GmailWrapper:
         try:
             self.service.users().messages().send(userId='me', body=message).execute()
             print("Email sent successfully.")
+            return True
         except HttpError as e:
             print(f"An error occurred: {str(e)}")
+            return False
 
     def _create_message(self, to, subject, message_body):
         message = MIMEText(message_body)
