@@ -6,3 +6,4 @@ google-auth-oauthlib
 wget
 pydub
 azure-cognitiveservices-speech
+openai
