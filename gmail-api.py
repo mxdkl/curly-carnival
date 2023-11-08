@@ -1,5 +1,6 @@
-from base64 import urlsafe_b64encode
 import os.path
+from email.mime.text import MIMEText
+from base64 import urlsafe_b64encode
 from google.auth.transport.requests import Request
 from google.oauth2.credentials import Credentials
 from google_auth_oauthlib.flow import InstalledAppFlow
@@ -40,9 +41,6 @@ class GmailWrapper:
             print(f"An error occurred: {str(e)}")
 
     def _create_message(self, to, subject, message_body):
-        from email.mime.text import MIMEText
-        from base64 import urlsafe_b64encode
-
         message = MIMEText(message_body)
         message['to'] = to
         message['subject'] = subject
