@@ -1,4 +1,6 @@
 import os
+import json
+import requests
 import azure_speech_api
 from dotenv import load_dotenv
 from whatsapp_api_client_python import API
@@ -21,11 +23,43 @@ class GreenApiWrapper:
         else:
             greenAPI.sending.sendMessage(receiver, message)
 
+    def sendVoiceMessage(self, receiver: str, message: str) -> None:
+        if message:
+            if receiver not in self.chat_history:
+                self.chat_history[receiver] = []
+                self.chat_history[receiver].append(message)
+            url = "https://api.play.ht/api/v2/tts"
+            payload = {
+                "text": message,
+                "voice": "s3://mockingbird-prod/ayla_vo_meditation_d11dd9da-b5f1-4709-95a6-e6d5dc77614a/voices/speaker/manifest.json",
+                "output_format": "mp3",
+                "voice_engine": "PlayHT2.0"
+            }
+            headers = {
+                "accept": "text/event-stream",
+                "content-type": "application/json",
+                "AUTHORIZATION": os.getenv('PLAYHT_TOKEN'),
+                "X-USER-ID": os.getenv('PLAYHT_ID')
+            }
+            response = requests.post(url, json=payload, headers=headers)
+            if response.text.rfind("completed"):
+                data=json.loads(response.text[response.text.rfind('{'):])
+                url=data["url"]
+                # print(url)
+                fileName = url[url.rfind('/')+1:]
+                self._sendFileByUrl(receiver, url, fileName)
+
     def _sendFileByUpload(self, receiver: str, file_path: str, file_name: str, caption: str) -> None:
         if receiver not in self.chat_history:
             self.chat_history[receiver] = []
         self.chat_history[receiver].append(caption)
         greenAPI.sending.sendFileByUpload(receiver, file_path, file_name, caption)
+
+    def _sendFileByUrl(self, receiver: str, url: str, file_name: str, caption: str = None) -> None:
+        if receiver not in self.chat_history:
+            self.chat_history[receiver] = []
+        self.chat_history[receiver].append(caption)
+        greenAPI.sending.sendFileByUrl(receiver, url, file_name, caption)
 
     def receivingMessage(self) -> None:
         greenAPI.webhooks.startReceivingNotifications(self._handler)
