@@ -34,7 +34,7 @@ class GreenApiWrapper:
         if type_webhook == "incomingMessageReceived":
             self._incoming_message_received(body)
 
-    def _incoming_message_received(body: dict) -> None:
+    def _incoming_message_received(self, body: dict) -> None:
         sender = body["senderData"]["sender"]
         senderName = body["senderData"]["senderName"]
         typeMessage = body["messageData"]["typeMessage"]
