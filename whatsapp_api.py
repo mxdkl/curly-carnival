@@ -1,10 +1,9 @@
 import os
-import requests
-import json
 from dotenv import load_dotenv
 from datetime import datetime
 from threading import Thread
 from whatsapp_api_client_python import API
+import azure_speech_api
 
 load_dotenv()
 greenAPI = API.GreenApi(
@@ -13,20 +12,20 @@ greenAPI = API.GreenApi(
 
 
 def main():
-    receiver = os.getenv('MAX_NUM')
-    # receiver = os.getenv('JEE_NUM')
+    # receiver = os.getenv('MAX_NUM')
+    receiver = os.getenv('JEE_NUM')
     receivingNotificationsThread = Thread(target=receivingNotificationsTask)
     receivingNotificationsThread.daemon = True
     receivingNotificationsThread.start()
 
     while True:
         message = input(f"Reply @{receiver} if you want:\n")
-        url = getAudioFromText(message)
-        if url:
-            fileName = url[url.rfind('/')+1:]
-            greenAPI.sending.sendFileByUrl(
+        filePath = azure_speech_api.synthesize_audio_from_text(message)
+        if filePath:
+            fileName = filePath[filePath.rfind('/')+1:]
+            greenAPI.sending.sendFileByUpload(
                 receiver,
-                url,
+                filePath,
                 fileName,
             )
         else:
@@ -38,6 +37,8 @@ def receivingNotificationsTask() -> None:
 
 
 def handler(type_webhook: str, body: dict) -> None:
+    print(body)
+    
     if type_webhook == "incomingMessageReceived":
         incoming_message_received(body)
 """
@@ -63,8 +64,8 @@ def incoming_message_received(body: dict) -> None:
     timestamp = body["timestamp"]
     time = get_notification_time(timestamp)
 
-    data = dumps(body, ensure_ascii=False, indent=4)
-    print(data)
+    # data = dumps(body, ensure_ascii=False, indent=4)
+    # print(data)
 
     sender = body["senderData"]["sender"]
     senderName = body["senderData"]["senderName"]
@@ -83,53 +84,25 @@ def incoming_message_received(body: dict) -> None:
 
     elif typeMessage == "imageMessage" or typeMessage == "videoMessage":
         messageData = body["messageData"]["fileMessageData"]
-        imageUrl = messageData["downloadUrl"]
+        downloadUrl = messageData["downloadUrl"]
         fileName = messageData["fileName"]
         caption = messageData["caption"]
 
         print(f'{senderName}: "{caption}"', end='\n\n')
         greenAPI.sending.sendFileByUrl(
             sender,
-            imageUrl,
+            downloadUrl,
             fileName,
-            "Robot: "+ caption
+            "Robot: "+ caption,
         )
-
     elif typeMessage == "audioMessage":
         messageData = body["messageData"]["fileMessageData"]
-        imageUrl = messageData["downloadUrl"]
-        fileName = messageData["fileName"]
-
-        print(f'{senderName}: "{caption}"', end='\n\n')
-        greenAPI.sending.sendFileByUpload(
-            sender,
-            "data/green-api-logo_2.png",
-            "green-api-logo_2.png",
-        )
+        downloadUrl = messageData["downloadUrl"]
+        messageText = azure_speech_api.recognize_text_from_audio(downloadUrl)
+        if messageText:
+            greenAPI.sending.sendMessage(sender, typeMessage+": "+messageText)
 
     # else:
-def getAudioFromText(message: str) -> str:
-    if message:
-        url = "https://api.play.ht/api/v2/tts"
-        payload = {
-            "text": message,
-            "voice": "s3://mockingbird-prod/ayla_vo_expressive_16095e08-b9e8-429b-947c-47a75e41053b/voices/speaker/manifest.json",
-            "output_format": "mp3",
-            "voice_engine": "PlayHT2.0"
-        }
-        headers = {
-            "accept": "text/event-stream",
-            "content-type": "application/json",
-            "AUTHORIZATION": os.getenv('PLAYHT_TOKEN'),
-            "X-USER-ID": os.getenv('PLAYHT_ID')
-        }
-        # print(headers)
-        response = requests.post(url, json=payload, headers=headers)
-
-        # print(response.text)
-        if response.text.rfind("completed"):
-            data=json.loads(response.text[response.text.rfind('{'):])
-            return(data["url"])
 
 
 if __name__ == '__main__':
