@@ -1,17 +1,17 @@
 import os
 import json
 import requests
-import azure_speech_api
+import azureAPI
 from dotenv import load_dotenv
 from whatsapp_api_client_python import API
 
-load_dotenv()
-greenAPI = API.GreenApi(
-    os.getenv('GREENAPI_ID'), os.getenv('GREENAPI_TOKEN')
-)
 
 class GreenApiWrapper:
     def __init__(self):
+        load_dotenv()
+        self.greenAPI = API.GreenApi(
+            os.getenv('GREENAPI_ID'), os.getenv('GREENAPI_TOKEN')
+        )
         self.chat_history = {}
 
     def sendMessage(self, receiver: str, message: str, attachment = None) -> None:
@@ -21,7 +21,7 @@ class GreenApiWrapper:
         if attachment:
             self._sendFileByUpload(receiver, attachment, attachment, message)
         else:
-            greenAPI.sending.sendMessage(receiver, message)
+            self.greenAPI.sending.sendMessage(receiver, message)
 
     def sendVoiceMessage(self, receiver: str, message: str) -> None:
         if message:
@@ -53,16 +53,16 @@ class GreenApiWrapper:
         if receiver not in self.chat_history:
             self.chat_history[receiver] = []
         self.chat_history[receiver].append(caption)
-        greenAPI.sending.sendFileByUpload(receiver, file_path, file_name, caption)
+        self.greenAPI.sending.sendFileByUpload(receiver, file_path, file_name, caption)
 
     def _sendFileByUrl(self, receiver: str, url: str, file_name: str, caption: str = None) -> None:
         if receiver not in self.chat_history:
             self.chat_history[receiver] = []
         self.chat_history[receiver].append(caption)
-        greenAPI.sending.sendFileByUrl(receiver, url, file_name, caption)
+        self.greenAPI.sending.sendFileByUrl(receiver, url, file_name, caption)
 
     def receivingMessage(self) -> None:
-        greenAPI.webhooks.startReceivingNotifications(self._handler)
+        self.greenAPI.webhooks.startReceivingNotifications(self._handler)
 
     def _handler(self, type_webhook: str, body: dict) -> None:
         if type_webhook == "incomingMessageReceived":
@@ -96,7 +96,7 @@ class GreenApiWrapper:
             fileName = messageData["fileName"]
             caption = messageData["caption"]
 
-            messageText = azure_speech_api.recognize_text_from_audio(downloadUrl)
+            messageText = azureAPI.recognize_text_from_audio(downloadUrl)
             if messageText:
                 print(f'{senderName}: "{messageText}"(recognized)', end='\n\n')
             else:

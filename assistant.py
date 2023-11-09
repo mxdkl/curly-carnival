@@ -4,15 +4,17 @@ import json
 from dotenv import load_dotenv
 from openaiAPI import OpenAIWrapper
 from gmailAPI import GmailWrapper
+from greenAPI import GreenApiWrapper
 
 
-class Assistant(OpenAIWrapper, GmailWrapper):
+class Assistant(OpenAIWrapper, GmailWrapper, GreenApiWrapper):
     def __init__(self, id, user):
-        super().__init__()
+        OpenAIWrapper.__init__(self)
         GmailWrapper.__init__(self)
+        GreenApiWrapper.__init__(self)
 
-        self.id = id
         self.user = user
+        self.id = id
         self.threads = self.client.beta.threads.create()
 
     def chat(self, message: str, attachments: list = []):
@@ -31,7 +33,7 @@ class Assistant(OpenAIWrapper, GmailWrapper):
                 outputs = []
                 for tool_call in run.required_action.submit_tool_outputs.tool_calls:
                     if tool_call.type == "function":
-                        # Run function called by assistant here
+                        # Run function called by assistant
                         arguments = json.loads(tool_call.function.arguments)
                         function_name = tool_call.function.name
                         output = str(self._callFunctionByName(function_name, arguments))
@@ -40,6 +42,9 @@ class Assistant(OpenAIWrapper, GmailWrapper):
                             "output": output
                         })
                 self._submitRunToolOutput(run.id, outputs)
+            elif run.status == "failed" or run.status == "cancelled":
+                print("Error occurred while running assistant.")
+                return
 
             time.sleep(1)
             run = self._retrieveRun(run.id)
@@ -82,6 +87,7 @@ class Assistant(OpenAIWrapper, GmailWrapper):
 
 if __name__ == "__main__":
     # Create an assistant
+    """
     name = "Eve, Personal Assistant"
     instructions = "You are a helpful assistant. You are a young woman named Eve. You conduct yourself very professionally, which you must because you deal with clients personal information, but can sometimes let your guard down depending on the client."
     description = "Eve is a personal assistant that helps you with your daily tasks."
@@ -89,12 +95,12 @@ if __name__ == "__main__":
     tools = []
     with open('assistant-tools.json') as f:
         tools = json.load(f)
+    id = OpenAIWrapper.createAssistant(name=name, description=description, instructions=instructions, model=model, tools=tools, files=None)
+    """
 
-    # Create assistant
-    #id = OpenAIWrapper.createAssistant(name=name, description=description, instructions=instructions, model=model, tools=tools, files=None)
-
+    # Use existing assistant
     load_dotenv()
     id = os.getenv("ASSISTANT_ID")
     user = "test"
     eve = Assistant(id, user)
-    print(eve.chat("send dingjee7@gmail.com an email with the subject test and the message this is a test email"))
+    print(eve.chat("send max@dekelnet.com an email expressing your gratitude for his help with the project."))
