@@ -9,7 +9,7 @@ from googleapiclient.errors import HttpError
 
 
 class GmailWrapper:
-    def __init__(self, credentials_file):
+    def __init__(self, credentials_file = 'token.json'):
         self.credentials_file = credentials_file
         self.service = self._create_gmail_service()
 
@@ -32,8 +32,8 @@ class GmailWrapper:
 
         return build('gmail', 'v1', credentials=creds)
 
-    def send_email(self, to, subject, message_body):
-        message = self._create_message(to, subject, message_body)
+    def send_email(self, to, subject, body):
+        message = self._create_message(to, subject, body)
         try:
             self.service.users().messages().send(userId='me', body=message).execute()
             print("Email sent successfully.")
@@ -42,8 +42,8 @@ class GmailWrapper:
             print(f"An error occurred: {str(e)}")
             return False
 
-    def _create_message(self, to, subject, message_body):
-        message = MIMEText(message_body)
+    def _create_message(self, to, subject, body):
+        message = MIMEText(body)
         message['to'] = to
         message['subject'] = subject
 

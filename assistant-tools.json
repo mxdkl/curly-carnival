@@ -1,0 +1,34 @@
+[
+    {
+        "type": "retrieval"
+    },
+    {
+        "type": "function",
+        "function": {
+            "name": "send_email",
+            "description": "send an email",
+            "parameters": {
+                "type": "object",
+                "properties": {
+                    "to": {
+                        "type": "string",
+                        "description": "whom to send the email"
+                    },
+                    "subject": {
+                        "type": "string",
+                        "description": "subject of the email"
+                    },
+                    "body": {
+                        "type": "string",
+                        "description": "body of the email"
+                    }
+                },
+                "required": [
+                    "to",
+                    "subject",
+                    "body"
+                ]
+            }
+        }
+    }
+]
