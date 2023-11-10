@@ -73,7 +73,8 @@ class GmailWrapper:
         except HttpError as e:
             print(f"An error occurred: {str(e)}")
 
-def main():
+
+if __name__ == '__main__':
     credentials_file = 'token.json'
     gmail_wrapper = GmailWrapper(credentials_file)
 
@@ -85,6 +86,3 @@ def main():
 
     # List unread emails
     gmail_wrapper.list_unread_emails()
-
-if __name__ == '__main__':
-    main()

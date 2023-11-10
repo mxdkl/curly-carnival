@@ -8,26 +8,23 @@ from greenAPI import GreenApiWrapper
 
 
 class Assistant(OpenAIWrapper, GmailWrapper):
-    def __init__(self, id, user):
+    def __init__(self, id):
         OpenAIWrapper.__init__(self)
         GmailWrapper.__init__(self)
 
         # Here is the key changes
         self.greenApi = GreenApiWrapper()
         self.greenApi.recipient = self
-        # print(self, self.greenApi)
 
-        self.user = user
         self.id = id
-        self.threads = self.client.beta.threads.create()
 
-    def chat(self, message: str, attachments: list = []):
+    def chat(self, thread_id, message: str, attachments: list = []):
         # Create message
-        self._createMessage(message, attachments)
+        self._createMessage(thread_id, message, attachments)
 
         # Run assistant
         run = self.client.beta.threads.runs.create(
-            thread_id = self.threads.id,
+            thread_id = thread_id,
             assistant_id = self.id
         )
 
@@ -45,37 +42,37 @@ class Assistant(OpenAIWrapper, GmailWrapper):
                             "tool_call_id": tool_call.id,
                             "output": output
                         })
-                self._submitRunToolOutput(run.id, outputs)
+                self._submitRunToolOutput(thread_id, run.id, outputs)
             elif run.status == "failed" or run.status == "cancelled":
                 print("Error occurred while running assistant.")
                 return
 
             time.sleep(1)
-            run = self._retrieveRun(run.id)
+            run = self._retrieveRun(thread_id, run.id)
             
         # Retrieve assistant response
-        response = self.client.beta.threads.messages.list(self.threads.id).data
+        response = self.client.beta.threads.messages.list(thread_id).data
         return response
 
-    def _createMessage(self, message, file_ids = []):
+    def _createMessage(self, thread_id, message, file_ids = []):
         thread_message = self.client.beta.threads.messages.create(
-            self.threads.id,
+            thread_id,
             role = "user",
             content = message,
             file_ids = file_ids
         )
         return thread_message
     
-    def _retrieveRun(self, run_id):
+    def _retrieveRun(self, thread_id, run_id):
         run = self.client.beta.threads.runs.retrieve(
-            thread_id = self.threads.id,
+            thread_id = thread_id,
             run_id = run_id
         )
         return run
     
-    def _submitRunToolOutput(self, run_id, outputs):
+    def _submitRunToolOutput(self, thread_id, run_id, outputs):
         run = self.client.beta.threads.runs.submit_tool_outputs(
-            thread_id = self.threads.id,
+            thread_id = thread_id,
             run_id = run_id,
             tool_outputs = outputs
         )
@@ -88,14 +85,14 @@ class Assistant(OpenAIWrapper, GmailWrapper):
         else:
             print(f"Function '{function_name}' not found.")
 
-# U can do whatever u want now in this function~
     def getNewMessage(self, data):
-        print ('Got', self.greenApi, data)
+        sender = data["senderData"]["sender"]
+        message = data["messageData"]["textMessageData"]["textMessage"]
+        # TODO: search db for sender and get thread id. If not found, create thread and get id 
     
-"""
+
 if __name__ == "__main__":
     # Create an assistant
-
     name = "Eve, Personal Assistant"
     instructions = "You are a helpful assistant. You are a young woman named Eve. You conduct yourself very professionally, which you must because you deal with clients personal information, but can sometimes let your guard down depending on the client."
     description = "Eve is a personal assistant that helps you with your daily tasks."
@@ -104,11 +101,3 @@ if __name__ == "__main__":
     with open('assistant-tools.json') as f:
         tools = json.load(f)
     id = OpenAIWrapper.createAssistant(name=name, description=description, instructions=instructions, model=model, tools=tools, files=None)
-
-    # Use existing assistant
-    load_dotenv()
-    id = os.getenv("ASSISTANT_ID")
-    user = "test"
-    eve = Assistant(id, user)
-    print(eve.chat("send max@dekelnet.com an email expressing your gratitude for his help with the project."))
-"""

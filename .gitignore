@@ -1,7 +1,7 @@
 # Project spescific
-creds.json
-token.json
-ids.txt
+**/creds.json
+**/token.json
+**/.env
 
 # Byte-compiled / optimized / DLL files
 __pycache__/

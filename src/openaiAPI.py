@@ -12,13 +12,22 @@ class OpenAIWrapper:
 
     def createAssistant(self, name, description, instructions, model, tools, files):
         assistant = self.client.beta.assistants.create(
-            name=name,
-            instructions=instructions,
-            description=description,
-            model=model,
-            tools=tools,
+            name = name,
+            instructions = instructions,
+            description = description,
+            model = model,
+            tools = tools,
         )
         return assistant.id
+    
+    def generateImage(self, prompt):
+        response = self.client.images.generate(
+            model = "dall-e-3",
+            prompt = prompt,
+            n = 1,
+            size = "1024x1024"
+        )
+        return response['data'][0]['url']
     
     def _uploadFiles(files):
         file_ids = []
