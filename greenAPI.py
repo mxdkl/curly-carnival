@@ -2,10 +2,10 @@ import os
 import json
 import requests
 import azureAPI
+from datetime import datetime
 from threading import Thread
 from dotenv import load_dotenv
 from whatsapp_api_client_python import API
-
 
 class GreenApiWrapper:
     def __init__(self):
@@ -13,11 +13,12 @@ class GreenApiWrapper:
         self.greenAPI = API.GreenApi(
             os.getenv('GREENAPI_ID'), os.getenv('GREENAPI_TOKEN')
         )
+        self.recipient = None
         self.chat_history = {}
 
     def sendMessage(self, receiver: str, message: str, attachment = None) -> requests.Response:
         if attachment:
-            self._sendFileByUpload(receiver, attachment, attachment, message)
+            self._sendFileByUpload(receiver, attachment, attachment)
         else:
             self._storeChatHistory(receiver, message)
             response = self.greenAPI.sending.sendMessage(receiver, message)
@@ -67,6 +68,9 @@ class GreenApiWrapper:
         receivingNotificationsThread.daemon = True
         receivingNotificationsThread.start()
 
+    def _notifyReceivedMessage(self, data):
+        self.recipient.getNewMessage(data)
+
     def _receivingNotificationsTask(self):
         self.greenAPI.webhooks.startReceivingNotifications(self._handler)
         print("GreenAPI is receiving messages in a daemon thread...")
@@ -75,13 +79,18 @@ class GreenApiWrapper:
         if type_webhook == "incomingMessageReceived":
             self._incoming_message_received(body)
 
-    def _incoming_message_received(self, body: dict) -> dict:
+    def _get_notification_time(timestamp: int) -> str:
+        return str(datetime.fromtimestamp(timestamp))
+
+    def _incoming_message_received(self, body: dict) -> None:
         sender = body["senderData"]["sender"]
         senderName = body["senderData"]["senderName"]
         typeMessage = body["messageData"]["typeMessage"]
-        print(f'New incoming message from {senderName} with {typeMessage}')
+        print(f'New incoming message from {senderName} with {typeMessage}\n')
 
-        if typeMessage == "textMessage" or typeMessage == "extendedTextMessage":
+        self._notifyReceivedMessage(body)
+
+"""         if typeMessage == "textMessage" or typeMessage == "extendedTextMessage":
             if typeMessage == "textMessage":
                 messageData = body["messageData"]["textMessageData"]
                 textMessage = messageData["textMessage"]
@@ -107,7 +116,6 @@ class GreenApiWrapper:
             if messageText:
                 print(f'{senderName}: "{messageText}"(recognized)', end='\n\n')
             else:
-                print(f'{senderName}: "{caption}"', end='\n\n')
+                print(f'{senderName}: "{caption}"', end='\n\n') """
         
-        return body
 

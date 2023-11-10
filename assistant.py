@@ -7,11 +7,15 @@ from gmailAPI import GmailWrapper
 from greenAPI import GreenApiWrapper
 
 
-class Assistant(OpenAIWrapper, GmailWrapper, GreenApiWrapper):
+class Assistant(OpenAIWrapper, GmailWrapper):
     def __init__(self, id, user):
         OpenAIWrapper.__init__(self)
         GmailWrapper.__init__(self)
-        GreenApiWrapper.__init__(self)
+
+        # Here is the key changes
+        self.greenApi = GreenApiWrapper()
+        self.greenApi.recipient = self
+        # print(self, self.greenApi)
 
         self.user = user
         self.id = id
@@ -83,11 +87,15 @@ class Assistant(OpenAIWrapper, GmailWrapper, GreenApiWrapper):
             func(**arguments)
         else:
             print(f"Function '{function_name}' not found.")
-    
 
+# U can do whatever u want now in this function~
+    def getNewMessage(self, data):
+        print ('Got', self.greenApi, data)
+    
+"""
 if __name__ == "__main__":
     # Create an assistant
-    """
+
     name = "Eve, Personal Assistant"
     instructions = "You are a helpful assistant. You are a young woman named Eve. You conduct yourself very professionally, which you must because you deal with clients personal information, but can sometimes let your guard down depending on the client."
     description = "Eve is a personal assistant that helps you with your daily tasks."
@@ -96,7 +104,6 @@ if __name__ == "__main__":
     with open('assistant-tools.json') as f:
         tools = json.load(f)
     id = OpenAIWrapper.createAssistant(name=name, description=description, instructions=instructions, model=model, tools=tools, files=None)
-    """
 
     # Use existing assistant
     load_dotenv()
@@ -104,3 +111,4 @@ if __name__ == "__main__":
     user = "test"
     eve = Assistant(id, user)
     print(eve.chat("send max@dekelnet.com an email expressing your gratitude for his help with the project."))
+"""
