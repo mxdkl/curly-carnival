@@ -16,12 +16,12 @@ class GreenApiWrapper:
         self.recipient = None
         self.chat_history = {}
 
-    def sendMessage(self, receiver: str, message: str, attachment = None) -> requests.Response:
+    def sendTextMessage(self, receiver: str, message: str, attachment = None) -> requests.Response:
         if attachment:
             self._sendFileByUpload(receiver, attachment, attachment)
         else:
             self._storeChatHistory(receiver, message)
-            response = self.greenAPI.sending.sendMessage(receiver, message)
+            response = self.greenAPI.sending.sendTextMessage(receiver, message)
             return response
 
     def sendVoiceMessage(self, receiver: str, message: str):

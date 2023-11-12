@@ -5,12 +5,14 @@ from dotenv import load_dotenv
 from openaiAPI import OpenAIWrapper
 from gmailAPI import GmailWrapper
 from greenAPI import GreenApiWrapper
+from database import Database
 
 
-class Assistant(OpenAIWrapper, GmailWrapper):
+class Assistant(OpenAIWrapper, GmailWrapper, Database):
     def __init__(self, id):
         OpenAIWrapper.__init__(self)
         GmailWrapper.__init__(self)
+        Database.__init__(self)
 
         # Here is the key changes
         self.greenApi = GreenApiWrapper()
@@ -23,10 +25,7 @@ class Assistant(OpenAIWrapper, GmailWrapper):
         self._createMessage(thread_id, message, attachments)
 
         # Run assistant
-        run = self.client.beta.threads.runs.create(
-            thread_id = thread_id,
-            assistant_id = self.id
-        )
+        run = self._createRun(thread_id)
 
         # Wait for assistant to finish. This code jank af
         while run.status != "completed":
@@ -63,6 +62,18 @@ class Assistant(OpenAIWrapper, GmailWrapper):
         )
         return thread_message
     
+    def _createThread(self):
+        thread = self.client.beta.threads.create()
+        return thread.id
+
+    
+    def _createRun(self, thread_id):
+        run = self.client.beta.threads.runs.create(
+            thread_id = thread_id,
+            assistant_id = self.id
+        )
+        return run
+    
     def _retrieveRun(self, thread_id, run_id):
         run = self.client.beta.threads.runs.retrieve(
             thread_id = thread_id,
@@ -88,7 +99,17 @@ class Assistant(OpenAIWrapper, GmailWrapper):
     def getNewMessage(self, data):
         sender = data["senderData"]["sender"]
         message = data["messageData"]["textMessageData"]["textMessage"]
-        # TODO: search db for sender and get thread id. If not found, create thread and get id 
+        print(f"New message from {sender}: {message}")
+        result = self.searchDatabase("Users", "PhoneNumber", sender)
+        if len(result) == 0:
+            # Create new thread and insert into database
+            thread_id = self.createThread()
+            self.insertIntoDatabase(PhoneNumber=sender, thread_id=thread_id)
+        else:
+            # Get thread id from database
+            thread_id = result[0][2]
+        response = self.chat(thread_id, message)
+        self.greenApi.sendTextMessage(sender, response[0].content)
     
 
 if __name__ == "__main__":

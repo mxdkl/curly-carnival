@@ -7,3 +7,5 @@ wget
 pydub
 azure-cognitiveservices-speech
 openai
+mysql-connector-python
+
