@@ -50,7 +50,7 @@ class Assistant(OpenAIWrapper, GmailWrapper, Database):
             run = self._retrieveRun(thread_id, run.id)
             
         # Retrieve assistant response
-        response = self.client.beta.threads.messages.list(thread_id).data
+        response = self.client.beta.threads.messages.list(thread_id).data[0].content[0].text.value
         return response
 
     def _createMessage(self, thread_id, message, file_ids = []):
@@ -100,16 +100,16 @@ class Assistant(OpenAIWrapper, GmailWrapper, Database):
         sender = data["senderData"]["sender"]
         message = data["messageData"]["textMessageData"]["textMessage"]
         print(f"New message from {sender}: {message}")
-        result = self.searchDatabase("Users", "PhoneNumber", sender)
+        result = self.searchDatabase("PhoneNumber", sender)
         if len(result) == 0:
             # Create new thread and insert into database
-            thread_id = self.createThread()
-            self.insertIntoDatabase(PhoneNumber=sender, thread_id=thread_id)
+            thread_id = self._createThread()
+            self.insertIntoDatabase(PhoneNumber=sender, ThreadID=thread_id)
         else:
             # Get thread id from database
             thread_id = result[0][2]
         response = self.chat(thread_id, message)
-        self.greenApi.sendTextMessage(sender, response[0].content)
+        self.greenApi.sendMessage(sender, response)
     
 
 if __name__ == "__main__":

@@ -7,6 +7,7 @@ from threading import Thread
 from dotenv import load_dotenv
 from whatsapp_api_client_python import API
 
+
 class GreenApiWrapper:
     def __init__(self):
         load_dotenv()
@@ -16,12 +17,12 @@ class GreenApiWrapper:
         self.recipient = None
         self.chat_history = {}
 
-    def sendTextMessage(self, receiver: str, message: str, attachment = None) -> requests.Response:
+    def sendMessage(self, receiver: str, message: str, attachment = None) -> requests.Response:
         if attachment:
             self._sendFileByUpload(receiver, attachment, attachment)
         else:
             self._storeChatHistory(receiver, message)
-            response = self.greenAPI.sending.sendTextMessage(receiver, message)
+            response = self.greenAPI.sending.sendMessage(receiver, message)
             return response
 
     def sendVoiceMessage(self, receiver: str, message: str):
