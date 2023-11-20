@@ -84,12 +84,13 @@ class GreenApiWrapper:
         return str(datetime.fromtimestamp(timestamp))
 
     def _incoming_message_received(self, body: dict) -> None:
+        typeMessage = body["messageData"]["typeMessage"]
         sender = body["senderData"]["sender"]
         senderName = body["senderData"]["senderName"]
-        typeMessage = body["messageData"]["typeMessage"]
         print(f'New incoming message from {senderName} with {typeMessage}\n')
-
-        self._notifyReceivedMessage(body)
+        
+        if typeMessage == "textMessage" or typeMessage == "extendedTextMessage":
+            self._notifyReceivedMessage(body)
 
 """         if typeMessage == "textMessage" or typeMessage == "extendedTextMessage":
             if typeMessage == "textMessage":

@@ -1,7 +1,5 @@
-import os
 import time
 import json
-from dotenv import load_dotenv
 from openaiAPI import OpenAIWrapper
 from gmailAPI import GmailWrapper
 from greenAPI import GreenApiWrapper
