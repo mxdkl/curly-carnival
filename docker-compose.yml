@@ -5,14 +5,14 @@ services:
     restart: always
     command: sh -c "sleep 10s ; python main.py"
     env_file:
-      - ./src/.env
+      - src/.env
     depends_on:
       - mysql
 
   mysql:
-    image: mysql:latest
+    image: docker.io/mysql:latest
     env_file:
-      - ./src/.env
+      - src/.env
     ports:
       - "3306:3306"
     volumes:
@@ -20,9 +20,10 @@ services:
       - ./init.sql:/docker-entrypoint-initdb.d/init.sql
     restart: always
     healthcheck:
-      test: ["CMD", "mysqladmin", "ping", "-h", "localhost"]
+      test: ["CMD", "mysqladmin", "ping", "-h", "mysql"]
       timeout: 10s
       retries: 5
+    hostname: mysql
 
 volumes:
   mysql_data:
