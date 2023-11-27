@@ -1038,7 +1038,7 @@ ol {
   z-index: 5;
 }
 
-.section-title h3 {
+.section-title h3, .title h3 {
   font-size: 15px;
   font-weight: 600;
   display: block;
@@ -1090,7 +1090,7 @@ ol {
     padding: 0px 10px;
     margin-bottom: 60px;
   }
-  .section-title h3 {
+  .section-title h3, .title h3{
     font-size: 14px;
   }
   .section-title h2 {
@@ -1980,7 +1980,7 @@ ol {
 .hero-area {
   position: relative;
   padding-top: 180px;
-  background-color: #009efd;
+  background: #009efd;
 }
 
 @media only screen and (min-width: 768px) and (max-width: 991px) {
@@ -2216,11 +2216,54 @@ ol {
   background-color: #f9f9f9;
 }
 
+
 .features .section-title {
   margin-bottom: 30px;
 }
 
-.features .single-feature {
+.features .table-content {
+  padding: 25px;
+}
+
+.features .table-content .middle-title {
+  font-size: 13px;
+  font-weight: 500;
+  text-transform: uppercase;
+  margin-bottom: 25px;
+}
+
+.features .table-content .table-list li {
+  position: relative;
+  padding-left: 25px;
+  font-size: 14px;
+  margin-bottom: 13px;
+}
+
+.features .table-content .table-list li:last-child {
+  margin: 0;
+}
+
+.features .table-content .table-list li i {
+  color: #009efd;
+  font-size: 14px;
+  position: absolute;
+  left: 0;
+  top: 4px;
+}
+
+
+/*======================================
+    Benefits Area CSS
+========================================*/
+.benefits {
+  background-color: #009efd;
+  text-align: center;
+  padding: 130px 0;
+}
+.benefits .title h3{
+    color: black;
+}
+.benefits .single-feature {
   text-align: left;
   padding: 35px;
   background-color: #fff;
@@ -2232,14 +2275,20 @@ ol {
   transition: all 0.5s cubic-bezier(0.68, -0.55, 0.27, 1.55) 0s;
 }
 
-.features .single-feature:hover {
+.benefits .single-feature:hover {
   -webkit-box-shadow: 0px 3px 5px #00000017;
           box-shadow: 0px 3px 5px #00000017;
   -webkit-transform: translateY(-5px);
           transform: translateY(-5px);
 }
 
-.features .single-feature i {
+.benefits .text{
+    display: inline;
+    float: left;
+    clear:none;
+}
+
+.benefits .single-feature i {
   height: 60px;
   width: 60px;
   line-height: 60px;
@@ -2254,49 +2303,40 @@ ol {
   margin-bottom: 30px;
 }
 
-.features .single-feature h3 {
+.benefits .single-feature h3 {
   font-size: 18px;
   font-weight: 500;
-  margin-bottom: 20px;
+  margin-bottom: 12px;
 }
 
-.features .single-feature p {
+.benefits .single-feature p {
   line-height: 22px;
 }
 
-/*======================================
-    Our Achievement CSS
-========================================*/
-.our-achievement {
-  background-color: #009efd;
-  text-align: center;
-  padding: 130px 0;
-}
-
 @media only screen and (min-width: 768px) and (max-width: 991px) {
-  .our-achievement {
+  .benefits {
     padding: 80px 0;
   }
 }
 
 @media (max-width: 767px) {
-  .our-achievement {
+  .benefits {
     padding: 60px 0;
   }
 }
 
-.our-achievement .title h2 {
+.benefits .title h2 {
   color: #fff;
   font-weight: 700;
   font-size: 35px;
   margin-bottom: 10px;
 }
 
-.our-achievement .title p {
+.benefits .title p {
   color: #fff;
 }
 
-.our-achievement .single-achievement {
+.benefits .single-achievement {
   margin-top: 50px;
   text-align: center;
   padding: 0px 10px;
@@ -2439,6 +2479,8 @@ ol {
   left: 0;
   top: 4px;
 }
+
+
 
 /*======================================
     Call To Action CSS
@@ -2953,3 +2995,7 @@ ol {
   color: #009efd;
   background-color: #fff;
 }
+
+
+
+
