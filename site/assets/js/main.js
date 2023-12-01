@@ -111,5 +111,63 @@ Author: GrayGrids
         navbarToggler.classList.toggle("active");
     });
 
+    /* Time */
+    var messageTime = document.querySelectorAll('.message .time');
 
+    const now = new Date()
+    for (var i = 0; i < messageTime.length; i++) {
+        messageTime[i].innerHTML = now.toLocaleTimeString("en-US", {hour: "numeric", minute: "numeric", hour12: false});
+    }
+    
 })();
+
+
+
+const navTipBtn = document.getElementById("navTipBtn");
+const navTooltip = document.getElementById("navTooltip");
+
+const heroTipBtn = document.getElementById("heroTipBtn");
+const heroTooltip = document.getElementById("heroTooltip");
+
+const navPopperInstance = Popper.createPopper(navTipBtn, navTooltip, {
+  placement: 'top',
+  modifiers: [
+    {
+      name: 'offset',
+      options: {
+        offset: [0, 16],
+      },
+    },
+  ],
+});
+
+const heroPopperInstance = Popper.createPopper(heroTipBtn, heroTooltip, {
+  placement: 'bottom',
+  modifiers: [
+    {
+      name: 'offset',
+      options: {
+        offset: [0, 16],
+      },
+    },
+  ],
+});
+
+const showEvents = ['mouseenter', 'focus'];
+const hideEvents = ['mouseleave', 'blur'];
+
+showEvents.forEach((event) => {
+    navTipBtn.addEventListener(event, function(){
+        navTooltip.setAttribute('data-show', '');
+        navPopperInstance.update();
+    });
+    heroTipBtn.addEventListener(event, function(){
+        heroTooltip.setAttribute('data-show', '');
+        heroPopperInstance.update();
+    });
+});
+
+hideEvents.forEach((event) => {
+  navTipBtn.addEventListener(event, function(){navTooltip.removeAttribute('data-show');});
+    heroTipBtn.addEventListener(event, function(){heroTooltip.removeAttribute('data-show');});
+});

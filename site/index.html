@@ -11,7 +11,7 @@
 
     <!-- ========================= CSS here ========================= -->
     <link rel="stylesheet" href="assets/css/bootstrap.min.css" />
-    <link rel="stylesheet" href="assets/css/LineIcons.2.0.css" />
+    <link rel="stylesheet" href="assets/css/lineIcons.4.0.css" />
     <link rel="stylesheet" href="assets/css/animate.css" />
     <link rel="stylesheet" href="assets/css/tiny-slider.css" />
     <link rel="stylesheet" href="assets/css/glightbox.min.css" />
@@ -74,18 +74,29 @@
                                         <a href="#security" aria-label="Toggle navigation">Security</a>
                                     </li>
                                     <li class="nav-item">
-                                        <a href="#pricing" aria-label="Toggle navigation">Future</a>
+                                        <a href="#future" aria-label="Toggle navigation">Future</a>
                                     </li>
                                     <li class="nav-item">
-                                        <a href="javascript:void(0)" aria-label="Toggle navigation">Vision</a>
+                                        <a href="#vision" aria-label="Toggle navigation">Vision</a>
                                     </li>
                                     <li class="nav-item">
-                                        <a href="javascript:void(0)" aria-label="Toggle navigation">Contact</a>
+                                        <a href="#contact" aria-label="Toggle navigation">Contact</a>
                                     </li>
                                 </ul>
                             </div> <!-- navbar collapse -->
                             <div class="button add-list-button">
-                                <a href="javascript:void(0)" class="btn"><i class="lni lni-whatsapp"></i><span d-none d-lg-block>Add Eve</span></a>
+                                <a href="https://wa.me/+8615101526507" id="navTipBtn" class="btn"><i class="lni lni-whatsapp"></i><span>Add Eve</span></a>
+                                <div id="navTooltip" class="tooltip" role="tooltip">
+                                    <h6>Scan this WhatsApp<br /> QR Code</h6>
+                                    <img class="qrCode" src="assets/images/qr-code.png" />
+                                    <ol>
+                                        <li>Open WhatsApp on your phone</li>
+                                        <li>Tap camera<img class="icon" alt="camera" src="assets/images/camera-icon.png">.</li>
+                                        <li>Hold your device over the QR code to scan.</li>
+                                        <li>Tap Add to Contacts.</li>
+                                    </ol>
+                                    <div class="arrow" data-popper-arrow></div>
+                                </div>
                             </div>
                         </nav>
                         <!-- End Navbar -->
@@ -102,19 +113,45 @@
             <div class="row align-items-center">
                 <div class="col-lg-3 col-md-12 col-12">
                     <div class="hero-content">
-                        <h1 class="wow fadeInLeft" data-wow-delay=".4s">AI-Powered Email Assistant for WhatsApp</h1>
+                        <h1 class="wow fadeInLeft" data-wow-delay=".4s">Your AI-Powered Email Assistant for WhatsApp</h1>
                         <p class="wow fadeInLeft" data-wow-delay=".6s">Chat, Call, and Manage Your Emails with Ease and Convenience.</p>
                         <div class="button wow fadeInLeft" data-wow-delay=".8s">
-                            <a href="javascript:void(0)" class="btn btn-success"><i class="lni lni-whatsapp"></i>Add me on WhatsApp</a>
+                            <a href="https://wa.me/+8615101526507" id="heroTipBtn" class="btn btn-success tip-btn"><i class="lni lni-whatsapp"></i>Add me on WhatsApp</a>
+                            <div id="heroTooltip" class="tooltip" role="tooltip">
+                                    <h5>Scan this WhatsApp QR Code</h5>
+                                    <img class="qrCode" src="assets/images/qr-code.png" />
+                                    <ol>
+                                        <li>Open WhatsApp on your phone</li>
+                                        <li>Tap camera<img class="icon" alt="camera" src="assets/images/camera-icon.png">.</li>
+                                        <li>Hold your device over the QR code to scan.</li>
+                                        <li>Tap Add to Contacts.</li>
+                                    </ol>
+                                    <div class="arrow" data-popper-arrow></div>
+                                </div>
                         </div>
                     </div>
                 </div>
                 <div class="col-lg-7 col-md-12 col-12">
-                    <div class="hero-image wow fadeInRight" data-wow-delay=".4s">
+                    <div class="hero-image" data-wow-delay=".4s">
                         <img src="assets/images/hero/phone.png" alt="#">
                     </div>
                 </div>
-                <div class="col-lg-2 col-md-12 col-12"></div>
+                <div class="whatsapp-container col-lg-2 col-md-12 col-12">
+                    <div class="whatsapp wow fadeInRight" data-wow-delay=".4s">
+                        <div class="message received">
+                            Hi there!👋
+                            <span class="metadata"><span class="time"></span></span>
+                        </div>
+                        <div class="message received">
+                        I’m Eve! Very nice to meet you.
+                        <span class="metadata"><span class="time"></span></span>
+                        </div>
+                        <div class="message received">
+                            I’m here to help you manage your emails through WhatsApp.😊
+                            <span class="metadata"><span class="time"></span></span>
+                        </div>
+                    </div>
+                </div>
             </div>
         </div>
     </section>
@@ -127,9 +164,8 @@
                 <div class="col-12">
                     <div class="section-title">
                         <h3 class="wow zoomIn" data-wow-delay=".2s">Features</h3>
-                        <h2 class="wow fadeInUp" data-wow-delay=".4s">The smartest way to manage your emails through WhatsApp.
+                        <h2 class="wow fadeInUp" data-wow-delay=".4s">The smartest way <br />to manage your emails through WhatsApp.
                         </h2>
-                        <p class="wow fadeInUp" data-wow-delay=".6s"></p>
                     </div>
                 </div>
             </div>
@@ -193,7 +229,7 @@
                 <div class="col-lg-6 col-12">
                     <!-- Start Single Feature -->
                     <div class="single-feature wow fadeInUp" data-wow-delay=".6s">
-                        <i class="lni lni-angellist"></i>
+                        <i class="lni lni-invention"></i>
                         <h3>Intelligence</h3>
                         <p>You can get reliable answers and inspiring solutions from your email assistant, Your email assistant also learns and improves constantly by interacting with you.</p>
                     </div>
@@ -202,7 +238,7 @@
                 <div class="col-lg-6 col-12">
                     <!-- Start Single Feature -->
                     <div class="single-feature wow fadeInUp" data-wow-delay=".2s">
-                        <i class="lni lni-emoji-friendly"></i>
+                        <i class="lni lni-friendly"></i>
                         <h3>Fun</h3>
                         <p>Have fun and entertainment by chatting, directing, and voice calling with your email assistant. Your email assistant can also use humor and formality according to your choice.</p>
                     </div>
@@ -215,13 +251,13 @@
     <!-- End Achievement Area -->
 
     <!-- Start Security Area -->
-    <section id="security" class="pricing-table section">
+    <section id="security" class="security section">
         <div class="container">
             <div class="row">
                 <div class="col-12">
                     <div class="section-title">
                         <h3 class="wow zoomIn" data-wow-delay=".2s">Security</h3>
-                        <h2 class="wow fadeInUp" data-wow-delay=".4s">Your privacy and security are our top priority</h2>
+                        <h2 class="wow fadeInUp" data-wow-delay=".4s">Your privacy and security are our top priority!</h2>
                         <p class="wow fadeInUp" data-wow-delay=".6s">We offer you different options to choose from, depending on your preferences and needs. There are the solutions and regulations we have to balance your security and convenience.</p>
                     </div>
                 </div>
@@ -232,20 +268,18 @@
                     <div class="single-table wow fadeInUp" data-wow-delay=".2s">
                         <!-- Table Head -->
                         <div class="table-head">
+                            <i class="lni lni-postcard"></i>
                             <h4 class="title">Third-party authentication</h4>
-                            <p>This is a method that allows us to access your email content through secure and reliable third-party authorities, such as Meta, Google, or Microsoft. You need to grant us permission to use these authorities to connect your email account with our service.</p>
+                            <p>This is a method that allows us to access your email content through secure and reliable third-party authorities. You need to grant us permission to use these authorities to connect your email account with our service.</p>
+                            <p>Currently supports：<i class="lni lni-google"></i>, <i class="lni lni-microsoft"></i>, and <i class="lni lni-apple-brand"></i></p>
                         </div>
                         <!-- End Table Head -->
                         <!-- Start Table Content -->
                         <div class="table-content">
                             <h4 class="middle-title">Advantages</h4>
-                                <p><i class="lni lni-checkmark-circle"></i> This method is fast, convenient, and easy to use. You do not need to forward your emails manually, and you can enjoy our service seamlessly through WhatsApp.</p>
-                        </div>
-                        <!-- End Table Content -->
-                        <!-- Start Table Content -->
-                        <div class="table-content">
+                                <p><i class="lni lni-thumbs-up"></i> This method is fast, convenient, and easy to use. You do not need to forward your emails manually, and you can enjoy our service seamlessly through WhatsApp.</p>
                             <h4 class="middle-title">Disadvantages</h4>
-                                <p><i class="lni lni-checkmark-circle"></i>This method requires you to trust us and the third-party authorities with your email account and privacy. You also need to have an account with one of these authorities to use this method.</p>
+                                <p><i class="lni lni-thumbs-up lni-rotate-180"></i> It requires you to trust us and the third-party authorities with your email account and privacy. You also need to have an account with one of these authorities to use this method.</p>
                         </div>
                         <!-- End Table Content -->
                     </div>
@@ -256,20 +290,17 @@
                     <div class="single-table wow fadeInUp" data-wow-delay=".4s">
                         <!-- Table Head -->
                         <div class="table-head">
+                            <i class="lni lni-envelope"></i>
                             <h4 class="title">Forward method</h4>
-                            <p>This is a method that allows you to use our service by forwarding the emails that you want us to handle to a fixed email address. We will process them and send you the results through WhatsApp.</p>
+                            <p>This is a method that allows you to use our service by forwarding the emails that you want us to handle to a fixed email address which we provide. We will process them and send you the results through WhatsApp.</p>
                         </div>
                         <!-- End Table Head -->
                         <!-- Start Table Content -->
                         <div class="table-content">
                             <h4 class="middle-title">Advantages</h4>
-                                <p><i class="lni lni-checkmark-circle"></i> This method is more traditional and secure. You do not need to grant us any permission to access your email account, and you can choose which emails you want us to handle.</p>
-                        </div>
-                        <!-- End Table Content -->
-                        <!-- Start Table Content -->
-                        <div class="table-content">
+                                <p><i class="lni lni-thumbs-up"></i> This method is more traditional and secure. You do not need to grant us any permission to access your email account, and you can choose which emails you want us to handle.</p>
                             <h4 class="middle-title">Disadvantages</h4>
-                                <p><i class="lni lni-checkmark-circle"></i> This method is more tedious and time-consuming. You need to forward your emails manually, and you may miss some important emails if you forget to forward them.</p>
+                                <p><i class="lni lni-thumbs-up lni-rotate-180"></i> It is more tedious and time-consuming. You need to forward your emails manually, and you may miss some important emails if you forget to forward them.</p>
                         </div>
                         <!-- End Table Content -->
                     </div>
@@ -280,20 +311,17 @@
                     <div class="single-table wow fadeInUp" data-wow-delay=".4s">
                         <!-- Table Head -->
                         <div class="table-head">
+                            <i class="lni lni-harddrive lni-rotate-270"></i>
                             <h4 class="title">end-to-end encryption &amp; GDPR</h4>
-                            <p>These are some other things that we do to ensure your privacy and security. We do not store any of your private data on our server, and we try to follow WhatsApp’s encryption standards and European data regulations. We use state-of-the-art AI models and algorithms to ensure the security and accuracy of our email communication and data.</p>
+                            <p>These are some other things that we do to ensure your privacy and security. We do not store any of your private data on our server, and we try to follow WhatsApp’s encryption standards and European data regulations.</p>
                         </div>
                         <!-- End Table Head -->
                         <!-- Start Table Content -->
                         <div class="table-content">
                             <h4 class="middle-title">Advantages</h4>
-                                <p><i class="lni lni-checkmark-circle"></i> This method is more traditional and secure. You do not need to grant us any permission to access your email account, and you can choose which emails you want us to handle.</p>
-                        </div>
-                        <!-- End Table Content -->
-                        <!-- Start Table Content -->
-                        <div class="table-content">
+                                <p><i class="lni lni-thumbs-up"></i> They are meant to give you peace of mind and confidence in using our service. You can trust us with your email needs and enjoy our service without any worries.</p>
                             <h4 class="middle-title">Disadvantages</h4>
-                                <p><i class="lni lni-checkmark-circle"></i> This method is more tedious and time-consuming. You need to forward your emails manually, and you may miss some important emails if you forget to forward them.</p>
+                                <p><i class="lni lni-thumbs-up lni-rotate-180"></i> They may not be enough to satisfy some users who have higher expectations or concerns about their privacy and security. We are always open to feedback and suggestions on how to improve our service and meet your needs.</p>
                         </div>
                         <!-- End Table Content -->
                     </div>
@@ -314,17 +342,19 @@
                         <h2 class="wow fadeInUp" data-wow-delay=".4s">That's one small step for us</h2>
                     </div>
                     <div class="table-content">
+                        <div class="col-lg-8 offset-lg-3 col-md-12 col-12">
                             <h4 class="middle-title">What's Next</h4>
                             <!-- Table List -->
                             <ul class="table-list">
-                                <li><i class="lni lni-checkmark-circle"></i> Booking flights, hotels, restaurants, and tickets.
-                                <li><i class="lni lni-checkmark-circle"></i> Checking weather, news, traffic, and sports.</li>
-                                <li><i class="lni lni-checkmark-circle"></i> Managing your calendar, reminders, and to-do lists.</li>
-                                <li><i class="lni lni-checkmark-circle"></i> Sending and receiving voice messages, GIF stickers, and emojis.</li>
-                                <li><i class="lni lni-checkmark-circle"></i> Searching and browsing the web.</li>
-                                <li><i class="lni lni-checkmark-circle"></i> And much more!</li>
+                                <li><i class="lni lni-arrow-right-circle"></i> Booking flights, hotels, restaurants, and tickets.
+                                <li><i class="lni lni-arrow-right-circle"></i> Checking weather, news, traffic, and sports.</li>
+                                <li><i class="lni lni-arrow-right-circle"></i> Managing your calendar, reminders, and to-do lists.</li>
+                                <li><i class="lni lni-arrow-right-circle"></i> Sending and receiving voice messages, GIF stickers, and emojis.</li>
+                                <li><i class="lni lni-arrow-right-circle"></i> Searching and browsing the web.</li>
+                                <li><i class="lni lni-arrow-right-circle"></i> And more features for you to define!</li>
                             </ul>
                             <!-- End Table List -->
+                        </div>
                     </div>
                 </div>
             </div>
@@ -332,18 +362,20 @@
     </section>
     <!-- End Features Area -->
 
-    <!-- Start Call To Action Area -->
-    <section class="section call-action">
+    <!-- Start Vison Area -->
+    <section id="vision" class="vision section">
         <div class="container">
             <div class="row">
                 <div class="section-title">
                         <h3 class="wow zoomIn" data-wow-delay=".2s">vision</h3>
                 </div>
-                <div class="col-lg-8 offset-lg-2 col-md-12 col-12">
-                    <div class="cta-content">
+                <div class="col-lg-10 offset-lg-1 col-md-12 col-12">
+                    <div class="content">
                         <h2 class="wow fadeInUp" data-wow-delay=".2s">Experience the power of AI, the joy of personalization, and the beauty of collaboration.
                         </h2>
-                        <p class="wow fadeInUp" data-wow-delay=".4s">Persona Corps creates personalized and immersive experiences for you. We use AI to design solutions that match your needs, preferences, and emotions. You can enjoy products and services that fit your style, interests, and feelings. Whether it’s a virtual assistant, a game, or a story, we can make it for you. <br />We also see AI as a new chance and challenge for humanity. We dream of a future where AI and humans can work and grow together. <br />We aim to reach a new level of human civilization with AI.</p>
+                        <p class="wow fadeInUp" data-wow-delay=".4s">Persona Corps creates personalized and immersive experiences for you. We use AI to design solutions that match your needs, preferences, and emotions. You can enjoy products and services that fit your style, interests, and feelings. Whether it’s a virtual assistant, a game, or a story, we can make it for you.</p>
+                        <p>We also see AI as a new chance and challenge for humanity. We dream of a future where AI and humans can work and grow together. </p>
+                        <p>We aim to reach a new level of human civilization with AI.</p>
                         <div class="button wow fadeInUp" data-wow-delay=".6s">
                             <a href="javascript:void(0)" class="btn">Join Us</a>
                         </div>
@@ -352,10 +384,10 @@
             </div>
         </div>
     </section>
-    <!-- End Call To Action Area -->
+    <!-- End Vision Area -->
     
-    <!-- Start Pricing Table Area -->
-    <section id="security" class="security section">
+    <!-- Start Contact Area -->
+    <section id="contact" class="contact section">
         <div class="container">
             <div class="row">
                 <div class="col-12">
@@ -366,7 +398,7 @@
                 </div>
             </div>
             <div class="row">
-                <div class="col-lg-8 col-md-6 col-12">
+                <div class="col-lg-6 offset-lg-1 col-md-6 col-12">
                     <!-- Single Table -->
                     <div class="single-table wow fadeInUp" data-wow-delay=".2s">
                         <!-- Table Head -->
@@ -374,13 +406,13 @@
                             <h4 class="title">for customers</h4>
                             <p>If you have any questions, feedback, or suggestions, you can contact us by sending an email to us.</p>
                             <div class="button">
-                                <a href="javascript:void(0)" class="btn">Contact Us</a>
+                                <a href="mailto:info@personacorps.com" class="btn"><i class="lni lni-envelope"></i> Contact Us</a>
                             </div>
                         </div>
                         <!-- End Table Head -->
                         <!-- Start Table Content -->
                         <div class="table-content">
-                            <h4 class="middle-title">Also</h4>
+                            <h5 class="middle-title">Also</h5>
                             <!-- Table List -->
                             <p>More advanced features are currently in beta testing and will be launched soon. If you are interested in trying it out, you can sign up for our waiting list by filling out this form. You will be notified when the product is ready for you.</p>
                             <form>
@@ -390,9 +422,10 @@
   </div>
   <div class="mb-3 form-check">
     <input type="checkbox" class="form-check-input" id="exampleCheck1">
-    <label class="form-check-label" for="exampleCheck1">I'd also like to receive updates and notifications about new products.</label>
+    <label class="form-check-label" for="exampleCheck1">I'd also like to subscribe updates and notifications about new features or new products.</label>
   </div>
-  <button type="submit" class="btn btn-primary">Join the waitlist</button>
+                                <div class="button">
+                                <a class="btn">Join the waitlist</a></div>
 </form>
                             <!-- End Table List -->
                         </div>
@@ -400,13 +433,13 @@
                     </div>
                     <!-- End Single Table-->
                 </div>
-                <div class="col-lg-4 col-md-6 col-12">
+                <div class="col-lg-4 offset-lg-1 col-md-5 offset-md-1 col-12">
                     <!-- Single Table -->
-                    <div class="single-table wow fadeInUp" data-wow-delay=".4s">
+                    <div class="single-table second-table wow fadeInUp" data-wow-delay=".4s">
                             <h4 class="title">for investors</h4>
                             <p>If you want to support our project, you can contact us by sending an email to this address. We will be happy to share more details and information with you.</p>
                             <div class="button">
-                                <a href="javascript:void(0)" class="btn">Support Us</a>
+                                <a href="invest@personacorps.com" class="btn"><i class="lni lni-envelope"></i> Support Us</a>
                             </div>
                     </div>
                     <!-- End Single Table-->
@@ -422,7 +455,7 @@
         <div class="footer-top">
             <div class="container">
                 <div class="row">
-                    <div class="col-lg-4 col-md-4 col-12">
+                    <div class="col-lg-6 col-md-8 col-12">
                         <!-- Single Widget -->
                         <div class="single-footer f-about">
                             <div class="logo">
@@ -431,44 +464,22 @@
                                 </a>
                             </div>
                             <p>Experience the power of AI, the joy of personalization, and the beauty of collaboration.</p>
-                            <ul class="social">
-                                <li><a href="javascript:void(0)"><i class="lni lni-facebook-filled"></i></a></li>
-                                <li><a href="javascript:void(0)"><i class="lni lni-twitter-original"></i></a></li>
-                                <li><a href="javascript:void(0)"><i class="lni lni-instagram"></i></a></li>
-                                <li><a href="javascript:void(0)"><i class="lni lni-linkedin-original"></i></a></li>
-                                <li><a href="javascript:void(0)"><i class="lni lni-youtube"></i></a></li>
-                                <li><a href="javascript:void(0)"><i class="lni lni-pinterest"></i></a></li>
-                            </ul>
+
                             <p class="copyright-text">&copy; 2023 <a href="index.html">PersonaCorps</a>
                             </p>
                         </div>
                         <!-- End Single Widget -->
                     </div>
-                    <div class="col-lg-8 col-md-8 col-12">
-                        <div class="row">
-                            <div class="col-lg-3 col-md-6 col-12">
-                                <!-- Single Widget -->
-                                <ul class="single-footer f-link">
-                                    <li>Home</li>
-                                    <li>Features</li>
-                                    <li>Benefits</li>
-                                    <li>Security</li>
-                                    <li>Future</li>
-                                    <li>Vision</li>
-                                </ul>
-                                <!-- End Single Widget -->
-                            </div>
-                            <div class="col-lg-3 col-md-6 col-12">
-                                <!-- Single Widget -->
-                                <ul class="single-footer f-link">
-                                    <li>Call</li>
-                                    <li>contact@personacorps.com</li>
-                                    <li>8 Ha'Universita st. Herzliya 4610101, Israel</li>
-                                </ul>
-                                <!-- End Single Widget -->
-                            </div>
-                        </div>
-                    </div>
+                    <div class="col-lg-4 offset-lg-2 col-md-4 col-12">
+                        <!-- Single Widget -->
+                        <ul class="single-footer f-link">
+                            <li><i class="lni lni-phone"></i><img src="assets/images/num.png" /></li>
+                            <li><i class="lni lni-envelope"></i><a href="mailto:contact@personacorps.com">contact@personacorps.com</a></li>
+                            <li><i class="lni lni-map-marker"></i>8 Ha'Universita st. Herzliya 4610101, Israel</li>
+                        </ul>
+                        <!-- End Single Widget -->
+                    </div>      
+                       
                 </div>
             </div>
         </div>
@@ -485,21 +496,10 @@
     <script src="assets/js/bootstrap.min.js"></script>
     <script src="assets/js/wow.min.js"></script>
     <script src="assets/js/tiny-slider.js"></script>
-    <script src="assets/js/glightbox.min.js"></script>
-    <script src="assets/js/count-up.min.js"></script>
+    <script src="assets/js/popper.min.js"></script>
+<!--    <script src="assets/js/glightbox.min.js"></script>-->
+<!--    <script src="assets/js/count-up.min.js"></script>-->
     <script src="assets/js/main.js"></script>
-    <script type="text/javascript">
-
-        //====== counter up 
-        var cu = new counterUp({
-            start: 0,
-            duration: 2000,
-            intvalues: true,
-            interval: 100,
-            append: " ",
-        });
-        cu.start();
-    </script>
 </body>
 
 </html>

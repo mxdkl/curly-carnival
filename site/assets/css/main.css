@@ -1284,7 +1284,6 @@ ol {
 
 .button .btn i {
   display: inline-block;
-  margin-right: 5px;
 }
 
 .button .btn:last-child {
@@ -1717,8 +1716,11 @@ ol {
           box-shadow: 0px 20px 50px 0px rgba(0, 0, 0, 0.05);
   -webkit-transition: all 0.3s ease-out 0s;
   transition: all 0.3s ease-out 0s;
-  background: #fff;
+  background: rgba(255, 255, 255, .88);
   padding: 0px 0;
+  -webkit-backdrop-filter: blur(32px);
+    backdrop-filter: blur(32px);
+    transition: background-color .3s cubic-bezier(.42, .00, .58, 1.00)
 }
 
 .navbar {
@@ -1960,15 +1962,25 @@ ol {
 
 .add-list-button {
   display: inline-block;
-  margin-left: 10px;
+  margin-left: 20px;
 }
 
 .add-list-button .btn i {
+  margin-right: 6px;
   font-size: 14px;
   display: inline-block;
-  margin-right: 5px;
+  color: #2af598;
 }
 
+@media only screen and (min-width: 992px) and (max-width: 1199px) {
+  .add-list-button .btn span {
+    display: none;
+  }
+  .add-list-button .btn i {
+      font-size: 18px;
+      margin:0 10px;
+  }
+}
 /*======================================
      End Header CSS
   ========================================*/
@@ -1979,8 +1991,8 @@ ol {
 
 .hero-area {
   position: relative;
-  padding-top: 180px;
-  background: #009efd;
+  padding-top: 120px;
+  background: #009efd url(../images/hero/email.png) center center no-repeat;
 }
 
 @media only screen and (min-width: 768px) and (max-width: 991px) {
@@ -1991,7 +2003,7 @@ ol {
 
 @media (max-width: 767px) {
   .hero-area {
-    padding: 120px 0 50px 0;
+    padding-top: 120px;
   }
 }
 
@@ -2043,7 +2055,7 @@ ol {
 
 .hero-area .hero-content .button .btn {
   background-color: #fff;
-  color: #009efd;
+  color: #2af598;
   margin-right: 12px;
 }
 
@@ -2209,6 +2221,86 @@ ol {
   }
 }
 
+.hero-area .hero-image{
+    margin-left:-10%;
+}
+
+.hero-area .whatsapp-container{
+    position: relative;
+}
+
+.hero-area .whatsapp{
+    position: absolute;
+    left: -38%;
+    bottom: 0;
+}
+
+@media (max-width: 767px) {
+  .hero-area .whatsapp{
+    top:-180px;
+    left: 40px;
+    }
+}
+
+.hero-area .whatsapp .message {
+  color: #000;
+  clear: both;
+  line-height: 18px;
+  font-size: 15px;
+  padding: 8px;
+  position: relative;
+  margin: 8px 0;
+  max-width: 85%;
+  word-wrap: break-word;
+}
+
+.hero-area .whatsapp .message:after {
+  position: absolute;
+  color: white;
+  content: " ";
+  width: 0;
+  height: 0;
+  border-style: solid;
+}
+
+.hero-area .whatsapp .metadata {
+  display: inline-block;
+  float: right;
+  padding: 0 0 0 7px;
+  position: relative;
+  bottom: -4px;
+}
+
+.hero-area .whatsapp .metadata .time {
+  color: rgba(0, 0, 0, .45);
+  font-size: 11px;
+  display: inline-block;
+}
+
+.message.received {
+  background: #fff;
+  border-radius: 5px;
+  float: left;
+}
+
+.message.received .metadata {
+  padding: 0 0 0 16px;
+}
+
+.message.received:first-of-type{
+    border-radius: 0 5px 5px 5px;
+}
+.message.received:first-of-type:after {
+  border-width: 0px 10px 10px 0;
+  border-color: transparent #fff transparent transparent;
+  top: 0;
+  left: -10px;
+}
+
+#heroTipBtn .lni{
+    margin-right: 4px;
+}
+
 /*======================================
     Features Area CSS
 ========================================*/
@@ -2222,7 +2314,7 @@ ol {
 }
 
 .features .table-content {
-  padding: 25px;
+  padding: 0 25px;
 }
 
 .features .table-content .middle-title {
@@ -2236,7 +2328,7 @@ ol {
   position: relative;
   padding-left: 25px;
   font-size: 14px;
-  margin-bottom: 13px;
+  margin-bottom: 8px;
 }
 
 .features .table-content .table-list li:last-child {
@@ -2250,7 +2342,21 @@ ol {
   left: 0;
   top: 4px;
 }
+.features p{
+    color: black;
+    font-size: 138.2%;
+    margin-bottom: 16px;
+}
 
+@media (max-width: 767px) {
+  .features p{
+    font-size: 114.6%;
+      margin-bottom: 8px;
+}
+    .features p:last-of-type{
+        margin-bottom: 32px;
+    }
+}
 
 /*======================================
     Benefits Area CSS
@@ -2258,7 +2364,10 @@ ol {
 .benefits {
   background-color: #009efd;
   text-align: center;
-  padding: 130px 0;
+  padding: 120px 0;
+}
+.benefits .title h2{
+    text-transform: capitalize;
 }
 .benefits .title h3{
     color: black;
@@ -2288,7 +2397,7 @@ ol {
     clear:none;
 }
 
-.benefits .single-feature i {
+.benefits .single-feature i{
   height: 60px;
   width: 60px;
   line-height: 60px;
@@ -2371,23 +2480,43 @@ ol {
 }
 
 /*=============================
-	Pricing Table CSS
+	Security Table CSS
 ===============================*/
-.pricing-table {
-  background-color: #f9f9f9;
+.security {
+  background-color: #2af4fd;
 }
 
-.pricing-table .section-title {
+.security .section-title {
   margin-bottom: 50px;
 }
 
+.security .section-title h3{
+    color: white;
+    font-weight: bold;
+}
+
 @media only screen and (min-width: 768px) and (max-width: 991px), (max-width: 767px) {
-  .pricing-table .section-title {
+  .security .section-title {
     margin-bottom: 30px;
   }
 }
-
-.pricing-table .single-table {
+.security .table-head>.lni{
+    display: inline-block;
+    font-size: 320%;
+    color:#2af598;
+    margin-bottom: 10px;
+}
+.security .lni-apple-brand{
+    font-size: 128%;
+    margin-top: 4px;
+}
+.security .title{
+    text-transform: capitalize;
+}
+.security .table-content .lni{
+    margin-right: 4px;
+}
+.security .single-table {
   border: 1px solid #eee;
   border-radius: 10px;
   margin-top: 30px;
@@ -2396,41 +2525,41 @@ ol {
   transition: all 0.5s cubic-bezier(0.68, -0.55, 0.27, 1.55) 0s;
 }
 
-.pricing-table .single-table:hover:hover {
+.security .single-table:hover:hover {
   -webkit-box-shadow: 0px 3px 5px #00000017;
           box-shadow: 0px 3px 5px #00000017;
   -webkit-transform: translateY(-5px);
           transform: translateY(-5px);
 }
 
-.pricing-table .single-table .table-head {
+.security .single-table .table-head {
   padding: 25px;
   border-bottom: 1px solid #eee;
 }
 
-.pricing-table .single-table .table-head .title {
+.security .single-table .table-head .title {
   font-size: 16px;
   font-weight: 600;
   margin-bottom: 20px;
 }
 
-.pricing-table .single-table .table-head p {
+.security .single-table .table-head p {
   font-weight: 400;
   font-size: 14px;
   line-height: 22px;
 }
 
-.pricing-table .single-table .table-head .price {
+.security .single-table .table-head .price {
   padding: 30px 0;
 }
 
-.pricing-table .single-table .table-head .price .amount {
+.security .single-table .table-head .price .amount {
   font-size: 30px;
   font-weight: 700;
   display: inline-block;
 }
 
-.pricing-table .single-table .table-head .price .amount .duration {
+.security .single-table .table-head .price .amount .duration {
   display: inline-block;
   font-size: 14px;
   color: #888;
@@ -2438,41 +2567,44 @@ ol {
   margin-left: 3px;
 }
 
-.pricing-table .single-table .table-head .button .btn {
+.security .single-table .table-head .button .btn {
   width: 100%;
   padding: 12px 30px;
   font-size: 13px;
   background-color: #081828;
 }
 
-.pricing-table .single-table .table-head .button .btn:hover {
+.security .single-table .table-head .button .btn:hover {
   background-color: #009efd;
   color: #fff;
 }
 
-.pricing-table .single-table .table-content {
+.security .single-table .table-content {
   padding: 25px;
 }
 
-.pricing-table .single-table .table-content .middle-title {
+.security .single-table .table-content .middle-title {
   font-size: 13px;
   font-weight: 500;
   text-transform: uppercase;
-  margin-bottom: 25px;
+  margin: 25px 0 15px 0;
+}
+.security .single-table .table-content h4:first-of-type{
+    margin-top: 0;
 }
 
-.pricing-table .single-table .table-content .table-list li {
+.security .single-table .table-content .table-list li {
   position: relative;
   padding-left: 25px;
   font-size: 14px;
   margin-bottom: 13px;
 }
 
-.pricing-table .single-table .table-content .table-list li:last-child {
+.security .single-table .table-content .table-list li:last-child {
   margin: 0;
 }
 
-.pricing-table .single-table .table-content .table-list li i {
+.security .single-table .table-content .table-list li i {
   color: #009efd;
   font-size: 14px;
   position: absolute;
@@ -2483,82 +2615,126 @@ ol {
 
 
 /*======================================
-    Call To Action CSS
+    Future CSS
 ========================================*/
-.call-action {
-  background-color: #009efd;
+.future{
+    background-color: #f9f9f9;
+}
+.future .table-list li{
+    margin-top: 4px;
 }
 
-.call-action .cta-content {
+/*======================================
+    Vision CSS
+========================================*/
+.vision {
+  background-color: #009efd;
+}
+.vision .section-title{
+    margin-bottom: 8px;
+}
+.vision .section-title h3{
+    color:black;
+}
+.vision .content {
   text-align: center;
   padding: 0px 50px;
 }
 
 @media only screen and (min-width: 768px) and (max-width: 991px) {
-  .call-action .cta-content {
+  .vision .content {
     padding: 0;
   }
 }
 
 @media (max-width: 767px) {
-  .call-action .cta-content {
+  .vision .content {
     padding: 0;
   }
 }
 
-.call-action .cta-content h2 {
+.vision .content h2 {
+  width: 80%;
   color: #fff;
   line-height: 50px;
   font-size: 38px;
   font-weight: 700;
-  margin-bottom: 30px;
+  margin: 0 auto 30px auto;
 }
 
 @media only screen and (min-width: 768px) and (max-width: 991px) {
-  .call-action .cta-content h2 {
+  .vision .content h2 {
     font-size: 32px;
     line-height: 45px;
   }
 }
 
 @media (max-width: 767px) {
-  .call-action .cta-content h2 {
+  .vision .content h2 {
     font-size: 25px;
     line-height: 35px;
   }
 }
 
-.call-action .cta-content p {
+.vision .content p {
   color: #fff;
-  padding: 0px 50px;
+  margin: 0 0 8px 8px;
+  padding: 0 64px;
+  text-align: left;
 }
 
 @media only screen and (min-width: 768px) and (max-width: 991px) {
-  .call-action .cta-content p {
+  .vision .content p {
     padding: 0;
   }
 }
 
 @media (max-width: 767px) {
-  .call-action .cta-content p {
+  .vision .content p {
     padding: 0;
   }
 }
 
-.call-action .cta-content .button {
+.vision .content .button {
   margin-top: 40px;
 }
 
-.call-action .cta-content .button .btn {
+.vision .content .button .btn {
   background-color: #fff;
   color: #009efd;
 }
 
-.call-action .cta-content .button .btn:hover {
+.vision .content .button .btn:hover {
   color: #fff;
   background-color: #081828;
 }
 
+/*======================================
+	Contact CSS
+========================================*/
+.contact .single-table .title{
+    text-transform: capitalize;
+}
+.contact .single-table p{
+    margin-top: 8px;
+}
+.contact .single-table .lni{
+    font-size: 120%;
+    margin: 2px 5px 0 0 ;
+    float: left;
+}
+.contact .single-table .button, .contact input[type="email"]{
+    margin-top: 20px
+}
+.contact .single-table .middle-title{
+    margin-top: 30px;
+}
+
+@media (max-width: 767px) {
+    .contact .second-table{
+    margin-top: 80px;
+  }
+}
 /*======================================
 	Error 404 CSS
 ========================================*/
@@ -2674,7 +2850,9 @@ ol {
     text-align: center;
   }
 }
-
+.footer .footer-top ul{
+    margin-top: 50px;
+}
 .footer .single-footer.f-about {
   padding-right: 30px;
 }
@@ -2755,7 +2933,7 @@ ol {
 
 .footer .single-footer.f-link li {
   display: block;
-  margin-bottom: 12px;
+  margin-bottom: 10px;
 }
 
 .footer .single-footer.f-link li:last-child {
@@ -2763,13 +2941,22 @@ ol {
 }
 
 .footer .single-footer.f-link li a {
+  display: inline;
   font-size: 15px;
   font-weight: 400;
-  color: #D2D6DC;
+  color: #888;
 }
 
 .footer .single-footer.f-link li a:hover {
   color: #009efd;
+}
+
+.footer .single-footer.f-link li img{
+    width: 144px;
+}
+.footer .single-footer.f-link li .lni{
+    display: inline;
+    margin-right: 4px;
 }
 
 .footer .single-footer h3 {
@@ -2996,6 +3183,80 @@ ol {
   background-color: #fff;
 }
 
+.tooltip {
+    padding: 40px 24px;
+    border-radius: 8px;
+    text-align: center;
+    z-index: 100;
+    display: none;
+    -webkit-box-shadow: 0px 8px 32px -4px rgba(0,0,0,0.38);
+            box-shadow: 0px 8px 32px -4px rgba(0,0,0,0.38);
+    background: rgba(255, 255, 255, .96);
+    -webkit-backdrop-filter: blur(32px);
+            backdrop-filter: blur(32px);
+}
+.hero-area .tooltip {
+    min-width: 280px;
+    padding: 48px 32px;
+}
+.tooltip p{
+    color: black !important;
+}
+.tooltip[data-show] {
+  display: block !important;
+}
+.arrow, .arrow::before {
+  position: absolute;
+  width: 8px;
+  height: 8px;
+  background: inherit;
+}
 
+.arrow {
+  visibility: hidden;
+}
 
+.arrow::before {
+  visibility: visible;
+  content: '';
+  transform: rotate(45deg);
+}
 
+.tooltip[data-popper-placement^='top'] > .arrow {
+  bottom: -4px;
+}
+
+.tooltip[data-popper-placement^='bottom'] > .arrow {
+  top: -4px;
+}
+
+.tooltip[data-popper-placement^='left'] > .arrow {
+  right: -4px;
+}
+
+.tooltip[data-popper-placement^='right'] > .arrow {
+  left: -4px;
+}
+
+nav .qrCode{
+    max-width: 180px;
+    margin-top: 10px;
+}
+@media (max-width: 767px) {
+    .hero-area .qrCode{
+    max-width: 260px;
+}
+}
+.tooltip ol{
+    list-style-type: decimal;
+    margin: 24px 0 0 20px;
+    text-align: left;
+    font-size: 90%;
+}
+nav .tooltip ol{
+    max-width: 180px;
+    font-size: 78.13%;
+}
+.tooltip .icon{
+    max-width: 26px;
+}
