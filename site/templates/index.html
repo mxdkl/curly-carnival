@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html class="no-js" lang="zxx">
+<html class="no-js" lang="en">
 
 <head>
     <meta charset="utf-8" />
@@ -7,15 +7,15 @@
     <title>PersonaCorps - AI for WhatsApp Emails</title>
     <meta name="description" content="" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
-    <link rel="shortcut icon" type="image/x-icon" href="assets/images/favicon.svg" />
+    <link rel="shortcut icon" type="image/x-icon" href="{{ url_for('static', filename='images/favicon.svg') }}" />
 
     <!-- ========================= CSS here ========================= -->
-    <link rel="stylesheet" href="assets/css/bootstrap.min.css" />
-    <link rel="stylesheet" href="assets/css/lineIcons.4.0.css" />
-    <link rel="stylesheet" href="assets/css/animate.css" />
-    <link rel="stylesheet" href="assets/css/tiny-slider.css" />
-    <link rel="stylesheet" href="assets/css/glightbox.min.css" />
-    <link rel="stylesheet" href="assets/css/main.css" />
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/bootstrap.min.css') }}" />
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/lineIcons.4.0.css') }}" />
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/animate.css') }}" />
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/tiny-slider.css') }}" />
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/glightbox.min.css') }}" />
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/main.css') }}" />
 
 </head>
 
@@ -48,7 +48,7 @@
                         <!-- Start Navbar -->
                         <nav class="navbar navbar-expand-lg">
                             <a class="navbar-brand" href="index.html">
-                                <img src="assets/images/logo/white-logo.svg" alt="Logo">
+                                <img src="{{ url_for('static', filename='images/logo/white-logo.svg') }}" alt="Logo">
                             </a>
                             <button class="navbar-toggler mobile-menu-btn" type="button" data-bs-toggle="collapse"
                                 data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent"
@@ -88,10 +88,10 @@
                                 <a href="https://wa.me/+8615101526507" id="navTipBtn" class="btn"><i class="lni lni-whatsapp"></i><span>Add Eve</span></a>
                                 <div id="navTooltip" class="tooltip" role="tooltip">
                                     <h6>Scan this WhatsApp<br /> QR Code</h6>
-                                    <img class="qrCode" src="assets/images/qr-code.png" />
+                                    <img class="qrCode" src="{{ url_for('static', filename='images/qr-code.png') }}" />
                                     <ol>
                                         <li>Open WhatsApp on your phone</li>
-                                        <li>Tap camera<img class="icon" alt="camera" src="assets/images/camera-icon.png">.</li>
+                                        <li>Tap camera<img class="icon" alt="camera" src="{{ url_for('static', filename='images/camera-icon.png') }}">.</li>
                                         <li>Hold your device over the QR code to scan.</li>
                                         <li>Tap Add to Contacts.</li>
                                     </ol>
@@ -119,10 +119,10 @@
                             <a href="https://wa.me/+8615101526507" id="heroTipBtn" class="btn btn-success tip-btn"><i class="lni lni-whatsapp"></i>Add me on WhatsApp</a>
                             <div id="heroTooltip" class="tooltip" role="tooltip">
                                     <h5>Scan this WhatsApp QR Code</h5>
-                                    <img class="qrCode" src="assets/images/qr-code.png" />
+                                    <img class="qrCode" src="{{ url_for('static', filename='images//qr-code.png') }}" />
                                     <ol>
                                         <li>Open WhatsApp on your phone</li>
-                                        <li>Tap camera<img class="icon" alt="camera" src="assets/images/camera-icon.png">.</li>
+                                        <li>Tap camera<img class="icon" alt="camera" src="{{ url_for('static', filename='images/camera-icon.png') }}">.</li>
                                         <li>Hold your device over the QR code to scan.</li>
                                         <li>Tap Add to Contacts.</li>
                                     </ol>
@@ -133,7 +133,7 @@
                 </div>
                 <div class="col-lg-7 col-md-12 col-12">
                     <div class="hero-image" data-wow-delay=".4s">
-                        <img src="assets/images/hero/phone.png" alt="#">
+                        <img src="{{ url_for('static', filename='images/hero/phone.png') }}" alt="#">
                     </div>
                 </div>
                 <div class="whatsapp-container col-lg-2 col-md-12 col-12">
@@ -460,7 +460,7 @@
                         <div class="single-footer f-about">
                             <div class="logo">
                                 <a href="index.html">
-                                    <img src="assets/images/logo/white-logo.svg" alt="#">
+                                    <img src="{{ url_for('static', filename='images/logo/white-logo.svg') }}" alt="logo">
                                 </a>
                             </div>
                             <p>Experience the power of AI, the joy of personalization, and the beauty of collaboration.</p>
@@ -473,7 +473,7 @@
                     <div class="col-lg-4 offset-lg-2 col-md-4 col-12">
                         <!-- Single Widget -->
                         <ul class="single-footer f-link">
-                            <li><i class="lni lni-phone"></i><img src="assets/images/num.png" /></li>
+                            <li><i class="lni lni-phone"></i><img src="{{ url_for('static', filename='images/num.png') }}" /></li>
                             <li><i class="lni lni-envelope"></i><a href="mailto:contact@personacorps.com">contact@personacorps.com</a></li>
                             <li><i class="lni lni-map-marker"></i>8 Ha'Universita st. Herzliya 4610101, Israel</li>
                         </ul>
@@ -493,13 +493,13 @@
     </a>
 
     <!-- ========================= JS here ========================= -->
-    <script src="assets/js/bootstrap.min.js"></script>
-    <script src="assets/js/wow.min.js"></script>
-    <script src="assets/js/tiny-slider.js"></script>
-    <script src="assets/js/popper.min.js"></script>
-<!--    <script src="assets/js/glightbox.min.js"></script>-->
-<!--    <script src="assets/js/count-up.min.js"></script>-->
-    <script src="assets/js/main.js"></script>
+    <script src="{{ url_for('static', filename='js/bootstrap.min.js') }}"></script>
+    <script src="{{ url_for('static', filename='js/wow.min.js') }}"></script>
+    <script src="{{ url_for('static', filename='js/tiny-slider.js') }}"></script>
+    <script src="{{ url_for('static', filename='js/popper.min.js') }}"></script>
+<!--    <script src="..../static/assets/js/glightbox.min.js"></script>-->
+<!--    <script src="..../static/assets/js/count-up.min.js"></script>-->
+    <script src="{{ url_for('static', filename='js/main.js') }}"></script>
 </body>
 
 </html>
