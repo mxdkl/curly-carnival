@@ -7,10 +7,10 @@ app = Flask(__name__)
 def index():
     return render_template('index.html')
 
-""" @app.route('/login')
+@app.route('/register')
 def login():
-    abort(401)
-    this_is_never_executed() """
+    return render_template('register.html')
+
 
 @app.errorhandler(404)
 def not_found(error):
