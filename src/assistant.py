@@ -2,7 +2,6 @@ import time
 import json
 from openaiAPI import OpenAIWrapper
 from gmailAPI import GmailWrapper
-from greenAPI import GreenApiWrapper
 from twilioAPI import TwilioApiWrapper
 from database import Database
 
@@ -13,9 +12,6 @@ class Assistant(OpenAIWrapper, GmailWrapper, TwilioApiWrapper, Database):
         GmailWrapper.__init__(self)
         TwilioApiWrapper.__init__(self)
         Database.__init__(self)
-
-        #self.greenApi = GreenApiWrapper()
-        #self.greenApi.recipient = self
 
         if id:
             self.id = id
