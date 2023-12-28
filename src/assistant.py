@@ -3,20 +3,24 @@ import json
 from openaiAPI import OpenAIWrapper
 from gmailAPI import GmailWrapper
 from greenAPI import GreenApiWrapper
+from twilioAPI import TwilioApiWrapper
 from database import Database
 
 
-class Assistant(OpenAIWrapper, GmailWrapper, Database):
-    def __init__(self, id):
+class Assistant(OpenAIWrapper, GmailWrapper, TwilioApiWrapper, Database):
+    def __init__(self, name, description, instructions, model, tools, files=None, id=None):
         OpenAIWrapper.__init__(self)
         GmailWrapper.__init__(self)
+        TwilioApiWrapper.__init__(self)
         Database.__init__(self)
 
-        # Here is the key changes
-        self.greenApi = GreenApiWrapper()
-        self.greenApi.recipient = self
+        #self.greenApi = GreenApiWrapper()
+        #self.greenApi.recipient = self
 
-        self.id = id
+        if id:
+            self.id = id
+        else:
+            self.id = self.createAssistant(name=name, description=description, instructions=instructions, model=model, tools=tools, files=files)
 
     def chat(self, thread_id, message: str, attachments: list = []):
         # Create message
@@ -94,9 +98,7 @@ class Assistant(OpenAIWrapper, GmailWrapper, Database):
         else:
             print(f"Function '{function_name}' not found.")
 
-    def getNewMessage(self, data):
-        sender = data["senderData"]["sender"]
-        message = data["messageData"]["textMessageData"]["textMessage"]
+    def processNewMessage(self, sender, message):
         print(f"New message from {sender}: {message}")
         result = self.searchDatabase("PhoneNumber", sender)
         if len(result) == 0:
@@ -107,7 +109,7 @@ class Assistant(OpenAIWrapper, GmailWrapper, Database):
             # Get thread id from database
             thread_id = result[0][2]
         response = self.chat(thread_id, message)
-        self.greenApi.sendMessage(sender, response)
+        self.sendMessage(sender, response)
     
 
 if __name__ == "__main__":
@@ -119,4 +121,5 @@ if __name__ == "__main__":
     tools = []
     with open('assistant-tools.json') as f:
         tools = json.load(f)
-    id = OpenAIWrapper.createAssistant(name=name, description=description, instructions=instructions, model=model, tools=tools, files=None)
+    Assistant(name, description, instructions, model, tools)
+    print(Assistant.id)
