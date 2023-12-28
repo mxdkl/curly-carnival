@@ -11,11 +11,11 @@ load_dotenv()
 id = os.getenv("ASSISTANT_ID")
 eve = Assistant(id)
 
-@app.route('/webhook')
+@app.route('/webhook', methods=['POST'])
 def reply_whatsapp():
     form_data = request.form
     if form_data:
         sender_name = form_data['ProfileName']
-        sender_number = form_data['From'.split(':')[1]]
+        sender_number = form_data['From'].split(':')[1]
         message = form_data['Body']
         eve.processNewMessage(sender_number, message)

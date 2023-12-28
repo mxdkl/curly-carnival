@@ -8,7 +8,7 @@ from database import Database
 
 
 class Assistant(OpenAIWrapper, GmailWrapper, TwilioApiWrapper, Database):
-    def __init__(self, name, description, instructions, model, tools, files=None, id=None):
+    def __init__(self, name=None, description=None, instructions=None, model=None, tools=None, files=None, id=None):
         OpenAIWrapper.__init__(self)
         GmailWrapper.__init__(self)
         TwilioApiWrapper.__init__(self)

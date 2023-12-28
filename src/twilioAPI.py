@@ -10,13 +10,13 @@ class TwilioApiWrapper:
         self.twilio_number = os.getenv('TWILIO_NUMBER')
         self.chat_history = []
 
-def sendMessage(self, to_number, body_text):
-    try:
-        message = self.client.messages.create(
-            from_=f"whatsapp:{self.twilio_number}",
-            body=body_text,
-            to=f"whatsapp:{to_number}"
-            )
-        print(f"Message sent to {to_number}: {message.body}")
-    except Exception as e:
-        print(f"Error sending message to {to_number}: {e}")
+    def sendMessage(self, to_number, body_text):
+        try:
+            message = self.client.messages.create(
+                from_=f"whatsapp:{self.twilio_number}",
+                body=body_text,
+                to=f"whatsapp:{to_number}"
+                )
+            print(f"Message sent to {to_number}: {message.body}")
+        except Exception as e:
+            print(f"Error sending message to {to_number}: {e}")
