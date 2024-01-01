@@ -1,6 +1,5 @@
 # Project spescific
-**/creds.json
-**/token.json
+**/client_secret.json
 **/.env
 
 # Byte-compiled / optimized / DLL files

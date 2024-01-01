@@ -34,11 +34,13 @@ class Assistant(OpenAIWrapper, GmailWrapper, TwilioApiWrapper, Database):
                         # Run function called by assistant
                         arguments = json.loads(tool_call.function.arguments)
                         function_name = tool_call.function.name
+                        self.service = self._create_gmail_service(self.searchDatabase("ThreadID", thread_id)[0]["GmailToken"])
                         output = str(self._callFunctionByName(function_name, arguments))
                         outputs.append({
                             "tool_call_id": tool_call.id,
                             "output": output
                         })
+                        self.service = None
                 self._submitRunToolOutput(thread_id, run.id, outputs)
             elif run.status == "failed" or run.status == "cancelled":
                 print("Error occurred while running assistant.")
@@ -98,12 +100,11 @@ class Assistant(OpenAIWrapper, GmailWrapper, TwilioApiWrapper, Database):
         print(f"New message from {sender}: {message}")
         result = self.searchDatabase("PhoneNumber", sender)
         if len(result) == 0:
-            # Create new thread and insert into database
-            thread_id = self._createThread()
-            self.insertIntoDatabase(PhoneNumber=sender, ThreadID=thread_id)
+            # If user is not in database, send them a message to sign up
+            self.sendMessage(sender, "Please sign up at https://www.personacorps.com")
         else:
             # Get thread id from database
-            thread_id = result[0][2]
+            thread_id = result[0]["ThreadId"]
         response = self.chat(thread_id, message)
         self.sendMessage(sender, response)
     

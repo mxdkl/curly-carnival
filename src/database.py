@@ -20,7 +20,6 @@ class Database:
 
     def connect_with_retry(self):
         retries = 0
-
         while retries < self.max_retries:
             try:
                 # Attempt to connect to the database
@@ -45,9 +44,11 @@ class Database:
     def searchDatabase(self, column, value):
         self.mycursor.execute(f"SELECT * FROM Users WHERE {column} = '{value}'")
         rows = self.mycursor.fetchall()
-        assert len(rows) <= 1, f"Expected 0 or 1 rows, got {len(rows)} rows."
+        assert len(rows) < 1, f"Nothing found in database for {column} = {value}"
+        column_names = [desc[0] for desc in self.mycursor.description]
+        rows = [dict(zip(column_names, row)) for row in rows]
         return rows
     
-    def insertIntoDatabase(self, PhoneNumber, ThreadID, Email=None):
-        self.mycursor.execute(f"INSERT INTO Users (PhoneNumber, ThreadID, Email) VALUES ('{PhoneNumber}', '{ThreadID}', '{Email}')")
+    def register(self, Email, Name, GmailToken):
+        self.mycursor.execute(f"INSERT INTO Users (Email, Name, GmailToken) VALUES ('{Email}', '{Name}', '{GmailToken}')")
         self.mydb.commit()

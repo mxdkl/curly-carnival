@@ -9,26 +9,23 @@ from googleapiclient.errors import HttpError
 
 
 class GmailWrapper:
-    def __init__(self, credentials_file = 'token.json'):
-        self.credentials_file = credentials_file
-        self.service = self._create_gmail_service()
+    def __init__(self):
+        self.client_secret_file = 'client_secret.json'
+        self.service = None
 
-    def _create_gmail_service(self):
-        SCOPES = ['https://www.googleapis.com/auth/gmail.readonly', 'https://www.googleapis.com/auth/gmail.send']
+    def _create_gmail_service(self, credentials_info=None):
+        SCOPES = ["https://www.googleapis.com/auth/gmail.modify"]
+
         creds = None
-
-        if os.path.exists(self.credentials_file):
-            creds = Credentials.from_authorized_user_file(self.credentials_file, SCOPES)
+        creds = Credentials.from_authorized_user_info(credentials_info, SCOPES)
 
         if not creds or not creds.valid:
             if creds and creds.expired and creds.refresh_token:
                 creds.refresh(Request())
             else:
-                flow = InstalledAppFlow.from_client_secrets_file('creds.json', SCOPES)
-                creds = flow.run_local_server(port=0)
-
-            with open(self.credentials_file, 'w') as token:
-                token.write(creds.to_json())
+                # Expired or non-existent credentials
+                # TODO: Handle this case
+                pass
 
         return build('gmail', 'v1', credentials=creds)
 

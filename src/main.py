@@ -1,17 +1,9 @@
-import os
-from dotenv import load_dotenv
-from assistant import Assistant
+from database import Database
 
 
 def main():
-    load_dotenv()
-    id = os.getenv("ASSISTANT_ID")
-
-    eve = Assistant(id)
-    eve.greenApi.receivingMessage()
-    
-    while True:
-        pass
+    db = Database()
+    db.searchDatabase("PhoneNumber", "+14085551234")
 
 
 if __name__ == "__main__":

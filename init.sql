@@ -8,8 +8,15 @@ USE curly_carnival;
 CREATE TABLE IF NOT EXISTS Users (
     PhoneNumber VARCHAR(50),
     Email VARCHAR(50),
-    ThreadID VARCHAR(50)
+    UserName VARCHAR(50),
+    ThreadID VARCHAR(50),
+    GmailToken JSON
 );
 
--- Display a message indicating successful table creation
-SELECT 'Users table created successfully' AS Message;
+-- Create the 'Emails' table
+CREATE TABLE IF NOT EXISTS Emails (
+    ID VARCHAR(50)
+);
+
+-- Display a message indicating successful creation
+SELECT 'SQL Tables created' AS Message;
