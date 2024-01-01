@@ -3,25 +3,13 @@ services:
   app:
     build: .
     restart: always
-    expose:
-      - "8000"
+    ports:
+      - "8000:8000"
     command: sh -c "sleep 10s ; gunicorn -w4 -b 0.0.0.0:8000 app:app -D"
     env_file:
       - src/.env
     depends_on:
       - mysql
-
-  nginx:
-    image: docker.io/nginx:latest
-    restart: unless-stopped
-    ports:
-      - "80:80"
-    network_mode: host
-    volumes:
-      - ./nginx.conf:/etc/nginx/sites-available/default
-      - ./src/site:/usr/share/nginx/html
-    depends_on:
-      - app
 
   mysql:
     image: docker.io/mysql:latest
