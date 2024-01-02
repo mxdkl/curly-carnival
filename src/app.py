@@ -1,6 +1,7 @@
 # Internal libraries
 import os
 import requests
+import json
 from pip._vendor import cachecontrol
 
 # Custom libraries
@@ -56,8 +57,8 @@ def not_found(error):
 # Goole login / Oauth
 # -----------------------------------------
 
-# uncomment to allow Http traffic for local dev
-#os.environ["OAUTHLIB_INSECURE_TRANSPORT"] = "1" # to allow Http traffic for local dev
+# uncomment to allow Http traffic, needed for gunicorn to work. its behind nginx so its fine
+os.environ["OAUTHLIB_INSECURE_TRANSPORT"] = "1" # to allow Http traffic for local dev
 
 app.secret_key = os.getenv("CLIENT_SECRET")
 
@@ -98,7 +99,8 @@ def callback():
 
     name = id_info.get("name")
     email = id_info.get("email")
-    eve.registerEmail(session["token"], name, email, credentials._id_token)
+    creds = json.dumps(credentials._id_token)
+    eve.registerEmail(session["token"], name, email, creds)
 
     return redirect('/')
 

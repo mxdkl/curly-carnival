@@ -103,7 +103,7 @@ class Assistant(OpenAIWrapper, GmailWrapper, TwilioApiWrapper, Database):
         user_id = str(uuid.uuid4())
 
         # Add user to database
-        self.register(sender, user_id, sender, thread_id)
+        self.registerPhoneNumber(user_id, sender, thread_id)
 
         # Send welcome login message
         self.sendMessage(sender, "Welcome to Persona Corps! Please register your email to continue. https://personacorps.com/login/" + user_id)
