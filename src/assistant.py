@@ -96,12 +96,19 @@ class Assistant(OpenAIWrapper, GmailWrapper, TwilioApiWrapper, Database):
         else:
             print(f"Function '{function_name}' not found.")
 
+    def newUserOnboard(self, sender):
+        # Create new thread
+        thread_id = self._createThread()
+
+        # Add user to database
+        self.register(sender, thread_id)
+
     def processNewMessage(self, sender, message):
         print(f"New message from {sender}: {message}")
         result = self.searchDatabase("PhoneNumber", sender)
         if len(result) == 0:
             # If user is not in database, send them a message to sign up
-            self.sendMessage(sender, "Please sign up at https://www.personacorps.com")
+            self.newUserOnboard(sender)
         else:
             # Get thread id from database
             thread_id = result[0]["ThreadId"]

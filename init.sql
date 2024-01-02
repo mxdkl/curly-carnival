@@ -6,15 +6,16 @@ USE curly_carnival;
 
 -- Create the 'Users' table
 CREATE TABLE IF NOT EXISTS Users (
+    UserID VARCHAR(50),
+    UserName VARCHAR(50),
     PhoneNumber VARCHAR(50),
     Email VARCHAR(50),
-    UserName VARCHAR(50),
     ThreadID VARCHAR(50),
     GmailToken JSON
 );
 
--- Create the 'Emails' table
-CREATE TABLE IF NOT EXISTS Emails (
+-- Create the 'EmailIDs' table
+CREATE TABLE IF NOT EXISTS EmailIDs (
     ID VARCHAR(50)
 );
 

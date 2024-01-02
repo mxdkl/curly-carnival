@@ -8,7 +8,5 @@ An assistant that can
 - Twilio api key
 
 ## Running
-### Docker
+- set up reverse proxy to forward incoming requests for port 80 to port 8000
 - sudo docker-compose up --build
-### Podman
-- podman-compose up --build

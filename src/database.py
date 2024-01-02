@@ -49,6 +49,9 @@ class Database:
         rows = [dict(zip(column_names, row)) for row in rows]
         return rows
     
-    def register(self, Email, Name, GmailToken):
-        self.mycursor.execute(f"INSERT INTO Users (Email, Name, GmailToken) VALUES ('{Email}', '{Name}', '{GmailToken}')")
+    def register(self, Email, Name, GmailToken, Token=None):
+        if Token:
+            self.mycursor.execute(f"INSERT INTO Users (Email, Name, GmailToken, Token) VALUES ('{Email}', '{Name}', '{GmailToken}', '{Token}')")
+        else:
+            self.mycursor.execute(f"INSERT INTO Users (Email, Name, GmailToken) VALUES ('{Email}', '{Name}', '{GmailToken}')")
         self.mydb.commit()

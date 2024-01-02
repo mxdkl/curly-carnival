@@ -18,7 +18,7 @@ app = Flask(__name__, template_folder="../site/templates/", static_folder="../si
 
 load_dotenv()
 id = os.getenv("ASSISTANT_ID")
-eve = Assistant(id)
+eve = Assistant(id=id)
 
 
 # -----------------------------------------
@@ -56,21 +56,30 @@ def not_found(error):
 # Goole login / Oauth
 # -----------------------------------------
 
-app.secret_key = os.getenv("CLIENT_SECRET")
+# uncomment to allow Http traffic for local dev
+#os.environ["OAUTHLIB_INSECURE_TRANSPORT"] = "1" # to allow Http traffic for local dev
 
-os.environ["OAUTHLIB_INSECURE_TRANSPORT"] = "1" # to allow Http traffic for local dev
+app.secret_key = os.getenv("CLIENT_SECRET")
 
 # Configure OAuth
 flow = InstalledAppFlow.from_client_secrets_file(
     "client_secret.json",
     scopes=["https://www.googleapis.com/auth/gmail.modify", "https://www.googleapis.com/auth/userinfo.profile", "https://www.googleapis.com/auth/userinfo.email", "openid"],
-    redirect_uri="http://localhost:5000/login/callback"
+    redirect_uri="https://personacorps.com/login/callback"
 )
 
 @app.route("/login")
 def login():
     authorization_url, state = flow.authorization_url()
     session["state"] = state
+    return redirect(authorization_url)
+
+@app.route("/login/<token>")
+def login_user(token):
+    authorization_url, state = flow.authorization_url()
+    session["state"] = state
+    session["token"] = token
+    eve.searchDatabase("Token", token)
     return redirect(authorization_url)
 
 @app.route("/login/callback")
@@ -90,7 +99,7 @@ def callback():
 
     name = id_info.get("name")
     email = id_info.get("email")
-    eve.register(name=name, email=email, GmailToken=credentials.to_json())
+    eve.register(name=name, email=email, GmailToken=credentials.to_json(), token=session.get('token'))
 
     return redirect('/')
 
