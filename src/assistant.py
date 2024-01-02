@@ -1,5 +1,6 @@
 import time
 import json
+import uuid
 from openaiAPI import OpenAIWrapper
 from gmailAPI import GmailWrapper
 from twilioAPI import TwilioApiWrapper
@@ -99,23 +100,31 @@ class Assistant(OpenAIWrapper, GmailWrapper, TwilioApiWrapper, Database):
     def newUserOnboard(self, sender):
         # Create new thread
         thread_id = self._createThread()
+        user_id = str(uuid.uuid4())
 
         # Add user to database
-        self.register(sender, thread_id)
+        self.register(sender, user_id, sender, thread_id)
+
+        # Send welcome login message
+        self.sendMessage(sender, "Welcome to Persona Corps! Please register your email to continue. https://personacorps.com/login/" + user_id)
 
     def processNewMessage(self, sender, message):
         print(f"New message from {sender}: {message}")
         result = self.searchDatabase("PhoneNumber", sender)
-        if len(result) == 0:
-            # If user is not in database, send them a message to sign up
-            self.newUserOnboard(sender)
-        else:
-            # Get thread id from database
-            thread_id = result[0]["ThreadId"]
-        response = self.chat(thread_id, message)
-        self.sendMessage(sender, response)
-    
+        
+        # if no numer is found, call newUserOnboard
+        # if a number is found but no email is found do nothing
+        # if a number and email is found, call chat
 
+        if "PhoneNumber" not in result[0]:
+            self.newUserOnboard(sender)
+        elif "PhoneNumber" in result[0] and "Email" not in result[0]:
+            pass
+        elif "PhoneNumber" in result[0] and "Email" in result[0] and "ThreadID" in result[0]:
+            thread_id = result[0]["ThreadID"]
+            response = self.chat(thread_id, message)
+            self.sendMessage(sender, response)
+    
 if __name__ == "__main__":
     # Create an assistant
     name = "Eve, Personal Assistant"

@@ -79,7 +79,6 @@ def login_user(token):
     authorization_url, state = flow.authorization_url()
     session["state"] = state
     session["token"] = token
-    eve.searchDatabase("Token", token)
     return redirect(authorization_url)
 
 @app.route("/login/callback")
@@ -99,7 +98,7 @@ def callback():
 
     name = id_info.get("name")
     email = id_info.get("email")
-    eve.register(name=name, email=email, GmailToken=credentials.to_json(), token=session.get('token'))
+    eve.registerEmail(session["token"], name, email, credentials._id_token)
 
     return redirect('/')
 
