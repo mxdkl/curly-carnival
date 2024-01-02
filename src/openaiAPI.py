@@ -6,12 +6,13 @@ from openai import OpenAI
 class OpenAIWrapper:
     def __init__(self):
         load_dotenv()
-        OpenAI.api_key = os.getenv("OPENAI_API_KEY")
-        self.client = OpenAI()
+        self.openai_client = OpenAI(
+            api_key = os.getenv("OPENAI_API_KEY"),
+        )
         self.chat_history = []
 
     def createAssistant(self, name, description, instructions, model, tools, files):
-        assistant = self.client.beta.assistants.create(
+        assistant = self.openai_client.beta.assistants.create(
             name = name,
             instructions = instructions,
             description = description,
@@ -21,7 +22,7 @@ class OpenAIWrapper:
         return assistant.id
     
     def generateImage(self, prompt):
-        response = self.client.images.generate(
+        response = self.openai_client.images.generate(
             model = "dall-e-3",
             prompt = prompt,
             n = 1,

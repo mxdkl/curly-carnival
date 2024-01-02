@@ -44,7 +44,6 @@ class Database:
     def searchDatabase(self, column, value):
         self.mycursor.execute(f"SELECT * FROM Users WHERE {column} = '{value}'")
         rows = self.mycursor.fetchall()
-        assert len(rows) < 1, f"Nothing found in database for {column} = {value}"
         column_names = [desc[0] for desc in self.mycursor.description]
         rows = [dict(zip(column_names, row)) for row in rows]
         return rows

@@ -51,11 +51,11 @@ class Assistant(OpenAIWrapper, GmailWrapper, TwilioApiWrapper, Database):
             run = self._retrieveRun(thread_id, run.id)
             
         # Retrieve assistant response
-        response = self.client.beta.threads.messages.list(thread_id).data[0].content[0].text.value
+        response = self.openai_client.beta.threads.messages.list(thread_id).data[0].content[0].text.value
         return response
 
     def _createMessage(self, thread_id, message, file_ids = []):
-        thread_message = self.client.beta.threads.messages.create(
+        thread_message = self.openai_client.beta.threads.messages.create(
             thread_id,
             role = "user",
             content = message,
@@ -64,26 +64,26 @@ class Assistant(OpenAIWrapper, GmailWrapper, TwilioApiWrapper, Database):
         return thread_message
     
     def _createThread(self):
-        thread = self.client.beta.threads.create()
+        thread = self.openai_client.beta.threads.create()
         return thread.id
 
     
     def _createRun(self, thread_id):
-        run = self.client.beta.threads.runs.create(
+        run = self.openai_client.beta.threads.runs.create(
             thread_id = thread_id,
             assistant_id = self.id
         )
         return run
     
     def _retrieveRun(self, thread_id, run_id):
-        run = self.client.beta.threads.runs.retrieve(
+        run = self.openai_client.beta.threads.runs.retrieve(
             thread_id = thread_id,
             run_id = run_id
         )
         return run
     
     def _submitRunToolOutput(self, thread_id, run_id, outputs):
-        run = self.client.beta.threads.runs.submit_tool_outputs(
+        run = self.openai_client.beta.threads.runs.submit_tool_outputs(
             thread_id = thread_id,
             run_id = run_id,
             tool_outputs = outputs
@@ -116,7 +116,7 @@ class Assistant(OpenAIWrapper, GmailWrapper, TwilioApiWrapper, Database):
         # if a number is found but no email is found do nothing
         # if a number and email is found, call chat
 
-        if "PhoneNumber" not in result[0]:
+        if len(result) == 0 or ("PhoneNumber" not in result[0]):
             self.newUserOnboard(sender)
         elif "PhoneNumber" in result[0] and "Email" not in result[0]:
             pass
