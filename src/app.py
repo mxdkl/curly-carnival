@@ -5,7 +5,7 @@ import json
 from pip._vendor import cachecontrol
 
 # Custom libraries
-from assistant import Assistant
+# from assistant import Assistant
 
 # External libraries
 from dotenv import load_dotenv
@@ -19,7 +19,7 @@ app = Flask(__name__, template_folder="../site/templates/", static_folder="../si
 
 load_dotenv()
 id = os.getenv("ASSISTANT_ID")
-eve = Assistant(id=id)
+# eve = Assistant(id=id)
 
 
 # -----------------------------------------
@@ -33,7 +33,7 @@ def reply_whatsapp():
         sender_name = form_data["ProfileName"]
         sender_number = form_data["From"].split(":")[1]
         message = form_data["Body"]
-        eve.processNewMessage(sender_number, message)
+        # eve.processNewMessage(sender_number, message)
 
 
 # -----------------------------------------
@@ -66,14 +66,28 @@ app.secret_key = os.getenv("CLIENT_SECRET")
 flow = InstalledAppFlow.from_client_secrets_file(
     "client_secret.json",
     scopes=["https://www.googleapis.com/auth/gmail.modify", "https://www.googleapis.com/auth/userinfo.profile", "https://www.googleapis.com/auth/userinfo.email", "openid"],
-    redirect_uri="https://personacorps.com/login/callback"
+    redirect_uri="http://127.0.0.1:5000/callback"
+#     redirect_uri="https://personacorps.com/login/callback"
 )
 
-@app.route("/login")
+def login_is_required(function):
+    def wrapper(*args, **kwargs):
+        if "email" not in session:
+            return abort(401)  # Authorization required
+        else:
+            return function()
+
+    return wrapper
+
+
+@app.route('/login', methods=["GET", "POST"])
 def login():
-    authorization_url, state = flow.authorization_url()
-    session["state"] = state
-    return redirect(authorization_url)
+    if request.method == "POST":
+        email = request.form['email']
+        session['email'] = email
+        return redirect('/mailbox')
+    else:
+        return render_template('app_login.html')
 
 @app.route("/login/<token>")
 def login_user(token):
@@ -86,6 +100,8 @@ def login_user(token):
 def callback():
     flow.fetch_token(authorization_response=request.url)
 
+    if not session["state"] == request.args["state"]: abort(500)
+
     credentials = flow.credentials
     request_session = requests.session()
     cached_session = cachecontrol.CacheControl(request_session)
@@ -97,14 +113,20 @@ def callback():
         audience=os.environ["CLIENT_ID"]
     )
 
-    name = id_info.get("name")
-    email = id_info.get("email")
+    session["google_id"] = id_info.get("sub")
+    session["name"] = id_info.get("name")
+    session["email"] = id_info.get("email")
     creds = json.dumps(credentials._id_token)
-    eve.registerEmail(session["token"], name, email, creds)
+    # eve.registerEmail(session["token"], session["name"], session["email"], creds)
 
-    return redirect('/')
+    return redirect('/mailbox')
+
+@app.route("/mailbox")
+@login_is_required
+def mailbox():
+    return f"Hello {session['email']}! <br/> <a href='/logout'><button>Logout</button></a>"
 
 @app.route("/logout")
 def logout():
     session.clear()
-    return redirect('/')
+    return redirect('/login')
