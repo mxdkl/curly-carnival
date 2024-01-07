@@ -10,7 +10,6 @@ from googleapiclient.errors import HttpError
 
 class GmailWrapper:
     def __init__(self):
-        self.client_secret_file = 'client_secret.json'
         self.service = None
 
     def _create_gmail_service(self, credentials_info=None):

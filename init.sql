@@ -11,7 +11,8 @@ CREATE TABLE IF NOT EXISTS Users (
     PhoneNumber VARCHAR(50),
     Email VARCHAR(50),
     ThreadID VARCHAR(50),
-    GmailToken JSON
+    GmailToken JSON,
+    GmailRefreshToken JSON
 );
 
 -- Create the 'EmailIDs' table

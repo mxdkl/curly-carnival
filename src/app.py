@@ -34,6 +34,9 @@ def reply_whatsapp():
         sender_number = form_data["From"].split(":")[1]
         message = form_data["Body"]
         eve.processNewMessage(sender_number, message)
+        return "OK"
+    else:
+        return "Form data not found."
 
 
 # -----------------------------------------
@@ -115,8 +118,11 @@ def callback():
     session["google_id"] = id_info.get("sub")
     session["name"] = id_info.get("name")
     session["email"] = id_info.get("email")
-    creds = json.dumps(credentials._id_token)
-    eve.registerEmail(session["token"], session["name"], session["email"], creds)
+
+    access_token = json.dumps(credentials.token)
+    refresh_token = json.dumps(credentials.refresh_token)
+    
+    eve.registerEmail(session["token"], session["name"], session["email"], access_token, refresh_token)
 
     return redirect('/mailbox')
 

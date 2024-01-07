@@ -35,6 +35,7 @@ class Assistant(OpenAIWrapper, GmailWrapper, TwilioApiWrapper, Database):
                         # Run function called by assistant
                         arguments = json.loads(tool_call.function.arguments)
                         function_name = tool_call.function.name
+                        # setting self.service for gmailAPI
                         self.service = self._create_gmail_service(self.searchDatabase("ThreadID", thread_id)[0]["GmailToken"])
                         output = str(self._callFunctionByName(function_name, arguments))
                         outputs.append({
