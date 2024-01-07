@@ -5,7 +5,7 @@ import json
 from pip._vendor import cachecontrol
 
 # Custom libraries
-# from assistant import Assistant
+from assistant import Assistant
 
 # External libraries
 from dotenv import load_dotenv
@@ -19,7 +19,7 @@ app = Flask(__name__, template_folder="../site/templates/", static_folder="../si
 
 load_dotenv()
 id = os.getenv("ASSISTANT_ID")
-# eve = Assistant(id=id)
+eve = Assistant(id=id)
 
 
 # -----------------------------------------
@@ -33,7 +33,7 @@ def reply_whatsapp():
         sender_name = form_data["ProfileName"]
         sender_number = form_data["From"].split(":")[1]
         message = form_data["Body"]
-        # eve.processNewMessage(sender_number, message)
+        eve.processNewMessage(sender_number, message)
 
 
 # -----------------------------------------
@@ -66,8 +66,7 @@ app.secret_key = os.getenv("CLIENT_SECRET")
 flow = InstalledAppFlow.from_client_secrets_file(
     "client_secret.json",
     scopes=["https://www.googleapis.com/auth/gmail.modify", "https://www.googleapis.com/auth/userinfo.profile", "https://www.googleapis.com/auth/userinfo.email", "openid"],
-    redirect_uri="http://127.0.0.1:5000/callback"
-#     redirect_uri="https://personacorps.com/login/callback"
+    redirect_uri="https://personacorps.com/login/callback"
 )
 
 def login_is_required(function):
@@ -117,7 +116,7 @@ def callback():
     session["name"] = id_info.get("name")
     session["email"] = id_info.get("email")
     creds = json.dumps(credentials._id_token)
-    # eve.registerEmail(session["token"], session["name"], session["email"], creds)
+    eve.registerEmail(session["token"], session["name"], session["email"], creds)
 
     return redirect('/mailbox')
 

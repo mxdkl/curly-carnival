@@ -18,6 +18,10 @@ class Database:
         # Create a cursor
         self.mycursor = self.mydb.cursor()
 
+        # Increase wait_timeout and interactive_timeout
+        self.mycursor.execute("SET SESSION wait_timeout = 100000")
+        self.mycursor.execute("SET SESSION interactive_timeout = 100000")
+
     def connect_with_retry(self):
         retries = 0
         while retries < self.max_retries:
