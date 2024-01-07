@@ -1,4 +1,4 @@
-import os.path
+import json
 from email.mime.text import MIMEText
 from base64 import urlsafe_b64encode
 from google.auth.transport.requests import Request
@@ -16,6 +16,7 @@ class GmailWrapper:
         SCOPES = ["https://www.googleapis.com/auth/gmail.modify"]
 
         creds = None
+        credentials_info = json.loads(credentials_info)
         creds = Credentials.from_authorized_user_info(credentials_info, SCOPES)
 
         if not creds or not creds.valid:
