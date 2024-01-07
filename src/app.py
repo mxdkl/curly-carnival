@@ -119,7 +119,7 @@ def callback():
     session["name"] = id_info.get("name")
     session["email"] = id_info.get("email")
 
-    access_token = json.dumps(credentials)
+    access_token = str(credentials.to_json())
     refresh_token = None
     
     eve.registerEmail(session["token"], session["name"], session["email"], access_token, refresh_token)

@@ -16,8 +16,7 @@ class GmailWrapper:
         SCOPES = ["https://www.googleapis.com/auth/gmail.modify"]
 
         creds = None
-        credentials_info = json.loads(credentials_info)
-        creds = Credentials.from_authorized_user_info(credentials_info, SCOPES)
+        creds = Credentials.from_authorized_user_info(json.loads(credentials_info), SCOPES)
 
         if not creds or not creds.valid:
             if creds and creds.expired and creds.refresh_token:
