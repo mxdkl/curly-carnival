@@ -1,7 +1,17 @@
 {% extends "app_layout.html" %}
 {% block content %}
-    <form action="#" method="post">
-      <input type="text" name="username" placeholder="Username">
-      <input type="submit" value="Login">
-    </form>
+<div class="btn-group">
+  <a href="#" class="btn btn-primary active" aria-current="page">Drafts</a>
+  <a href="#" class="btn btn-primary">Outbox</a>
+  <a href="#" class="btn btn-primary">Settings</a>
+</div>
+
+<ul class="mt-4 list-group">
+  <li class="list-group-item">An item</li>
+  <li class="list-group-item">A second item</li>
+  <li class="list-group-item">A third item</li>
+  <li class="list-group-item">A fourth item</li>
+  <li class="list-group-item">And a fifth one</li>
+</ul>
+
 {% endblock %}

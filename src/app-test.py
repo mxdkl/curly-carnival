@@ -14,6 +14,7 @@ from flask import Flask, render_template, request, redirect, url_for, session, a
 from google_auth_oauthlib.flow import InstalledAppFlow
 from google.oauth2 import id_token
 import google.auth.transport.requests
+from flask_sqlalchemy import SQLAlchemy
 
 
 app = Flask(__name__, template_folder="../site/templates/", static_folder="../site/static/")
@@ -22,7 +23,26 @@ load_dotenv()
 id = os.getenv("ASSISTANT_ID")
 # eve = Assistant(id=id)
 
+app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///app-test_db.db'
+db=SQLAlchemy(app)
 
+with app.app_context():
+    db.create_all()
+    print("Database created")
+
+print(uuid.uuid4())
+
+class Emails(db.Model):
+    _id = db.Column("id", db.Integer, primary_key=True)
+    token = db.Column(db.String(100), unique=True, nullable=False)
+    receiver = db.Column(db.String(100))
+    sender = db.Column(db.String(100))
+    subject = db.Column(db.String(100))
+    content = db.Column(db.String(1000))
+
+    def __repr__(self) -> str:
+        return f"Emails({self._id}, {self.token}, {self.receiver}, {self.sender}, {self.subject}, {self.content} )"
+    
 # -----------------------------------------
 # WhatApp
 # -----------------------------------------
@@ -98,14 +118,13 @@ def login():
 
 @app.route("/login/<token>")
 def login_user(token):
-    session.clear()
     if is_valid_uuid(token):
         authorization_url, state = flow.authorization_url()
         session["state"] = state
         session["token"] = token
         return render_template('app_login.html', authorization_url=authorization_url)
     else:
-        redirect('/login')
+        return redirect('/login')
 
  
 #   redirect(authorization_url)
@@ -136,9 +155,25 @@ def callback():
     return redirect('/mailbox')
 
 @app.route("/mailbox")
-@login_is_required
+# @login_is_required
 def mailbox():
-    return f"Hello {session['email']}! <br/> <a href='/logout'><button>Logout</button></a>"
+    return render_template('app_mailbox.html')
+
+@app.route("/mailbox/<token>")
+def draft(token):
+    if is_valid_uuid(token):
+        draft = Emails(token=token ,subject="test", content="Something")
+        print(draft)
+        db.session.add(draft)
+        
+        db.session.commit()
+
+        found_draft = Emails.query.filter_by(token=token).first()
+        subject = found_draft.subject
+        content = found_draft.content
+        return render_template('app_draft.html', subject=subject, content=content, )
+    else:
+        return abort(401)
 
 @app.route("/logout")
 def logout():

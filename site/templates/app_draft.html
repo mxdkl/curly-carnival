@@ -1,0 +1,25 @@
+{% extends "app_layout.html" %}
+{% block content %}
+<div class="btn-group">
+  <a href="/drafts" class="btn btn-primary active" aria-current="page">Drafts</a>
+  <a href="#" class="btn btn-primary">Outbox</a>
+  <a href="#" class="btn btn-primary">Settings</a>
+</div>
+
+<form action="#" method="POST">
+  <div class="mb-3">
+    <label for="exampleFormControlInput1" class="form-label">To</label>
+    <input type="email" class="form-control" id="exampleFormControlInput1" placeholder="name@example.com" value="{{ email if email }}">
+  </div>
+  <div class="mb-3">
+    <label for="exampleFormControlInput1" class="form-label">Subject</label>
+    <input type="text" class="form-control" id="exampleFormControlInput1" placeholder="Subject" value="{{ subject if subject }}">
+  </div>
+  <div class="mb-3">
+    <label for="exampleFormControlTextarea1" class="form-label">Content</label>
+    <textarea class="form-control" id="exampleFormControlTextarea1" rows="3">{{ content if content}}</textarea>
+  </div>
+  <a href="#" class="btn btn-primary">Send</a>
+</form>
+
+{% endblock %}

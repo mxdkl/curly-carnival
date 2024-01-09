@@ -11,3 +11,4 @@ pydub
 openai
 Flask
 gunicorn
+# Flask-SQLAlchemy
