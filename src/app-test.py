@@ -14,7 +14,6 @@ from flask import Flask, render_template, request, redirect, url_for, session, a
 from google_auth_oauthlib.flow import InstalledAppFlow
 from google.oauth2 import id_token
 import google.auth.transport.requests
-from flask_sqlalchemy import SQLAlchemy
 
 
 app = Flask(__name__, template_folder="../site/templates/", static_folder="../site/static/")
@@ -23,26 +22,7 @@ load_dotenv()
 id = os.getenv("ASSISTANT_ID")
 # eve = Assistant(id=id)
 
-app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///app-test_db.db'
-db=SQLAlchemy(app)
 
-with app.app_context():
-    db.create_all()
-    print("Database created")
-
-print(uuid.uuid4())
-
-class Emails(db.Model):
-    _id = db.Column("id", db.Integer, primary_key=True)
-    token = db.Column(db.String(100), unique=True, nullable=False)
-    receiver = db.Column(db.String(100))
-    sender = db.Column(db.String(100))
-    subject = db.Column(db.String(100))
-    content = db.Column(db.String(1000))
-
-    def __repr__(self) -> str:
-        return f"Emails({self._id}, {self.token}, {self.receiver}, {self.sender}, {self.subject}, {self.content} )"
-    
 # -----------------------------------------
 # WhatApp
 # -----------------------------------------
@@ -65,10 +45,6 @@ def reply_whatsapp():
 def index():
     return render_template("index.html")
 
-@app.route("/register", methods=["GET"])
-def register():
-    return render_template("register.html")
-
 @app.errorhandler(404)
 def not_found(error):
     return render_template("404.html"), 404
@@ -85,7 +61,7 @@ app.secret_key = os.getenv("CLIENT_SECRET")
 
 # Configure OAuth
 flow = InstalledAppFlow.from_client_secrets_file(
-    "client_secret.json",
+    "D:\Projects\curly-carnival\curly-carnival\src\client_secret.json",
     scopes=["https://www.googleapis.com/auth/gmail.modify", "https://www.googleapis.com/auth/userinfo.profile", "https://www.googleapis.com/auth/userinfo.email", "openid"],
     redirect_uri="http://127.0.0.1:5000/callback"
     # redirect_uri="https://personacorps.com/login/callback"
@@ -162,16 +138,7 @@ def mailbox():
 @app.route("/mailbox/<token>")
 def draft(token):
     if is_valid_uuid(token):
-        draft = Emails(token=token ,subject="test", content="Something")
-        print(draft)
-        db.session.add(draft)
-        
-        db.session.commit()
-
-        found_draft = Emails.query.filter_by(token=token).first()
-        subject = found_draft.subject
-        content = found_draft.content
-        return render_template('app_draft.html', subject=subject, content=content, )
+        return render_template('app_draft.html', token=token)
     else:
         return abort(401)
 

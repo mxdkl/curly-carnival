@@ -1,0 +1,33 @@
+[
+    {
+        "model": "gpt-4-1106-preview",
+        "api_key": "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"
+    },
+    {
+        "model": "gpt-4",
+        "api_key": "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"
+    },
+    {
+        "model": "gpt-3.5-turbo-1106",
+        "api_key": "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"
+    },
+    {
+        "model": "gpt-3.5-turbo",
+        "api_key": "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"
+    },
+    {
+        "model": "gpt-3.5-turbo-instruct",
+        "api_key": "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"
+    },
+    {
+        "model": "gemini-pro",
+        "api_key": "AIzaSyBg9iiU8ZnrXblLnaolsKBlb-OJQo-IYtQ",
+        "api_type": "google"
+    },
+    {
+        "model": "gemini-pro-vision",
+        "api_key": "AIzaSyBg9iiU8ZnrXblLnaolsKBlb-OJQo-IYtQ",
+        "api_type": "google"
+    }
+    
+]

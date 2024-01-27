@@ -20,3 +20,14 @@ class TwilioApiWrapper:
             print(f"Message sent to {to_number}: {message.body}")
         except Exception as e:
             print(f"Error sending message to {to_number}: {e}")
+
+    def sendMedia(self, to_number, media_url):
+        try:
+            message = self.twilio_client.messages.create(
+                from_=f"whatsapp:{self.twilio_number}",
+                media_url=media_url,
+                to=f"whatsapp:{to_number}"
+                )
+            print(f"Media sent to {to_number}: {message.sid}")
+        except Exception as e:
+            print(f"Error sending media to {to_number}: {e}")

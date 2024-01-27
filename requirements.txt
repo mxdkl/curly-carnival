@@ -1,7 +1,7 @@
 google-api-python-client
 google-auth-httplib2
 google-auth-oauthlib
-azure-cognitiveservices-speech
+# azure-cognitiveservices-speech
 mysql-connector-python
 twilio
 whatsapp-api-client-python
@@ -12,3 +12,4 @@ openai
 Flask
 gunicorn
 # Flask-SQLAlchemy
+# pyautogen>=0.2.3
