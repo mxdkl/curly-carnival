@@ -22,6 +22,7 @@ load_dotenv()
 id = os.getenv("ASSISTANT_ID")
 # eve = Assistant(id=id)
 
+print(uuid.uuid4())
 
 # -----------------------------------------
 # WhatApp
