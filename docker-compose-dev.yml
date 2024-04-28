@@ -1,3 +1,7 @@
+# Devlopment docker-compose file.
+# Should be the same as docker-compose.yml except that the project should be
+# mounted to the docker container for easy development
+
 version: "3"
 services:
     app:
@@ -5,7 +9,9 @@ services:
         restart: always
         ports:
             - "8000:8000"
-        command: sh -c "sleep 10s ; gunicorn -w4 -b 0.0.0.0:8000 app:app"
+        command: sh -c "sleep 10s ; gunicorn -w4 -b 0.0.0.0:8000 --reload app:app"
+        volumes:
+            - .:/app
         env_file:
             - src/.env
         depends_on:

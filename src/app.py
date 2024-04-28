@@ -15,9 +15,12 @@ from google.oauth2 import id_token
 import google.auth.transport.requests
 
 
+# Create the Flask app
 app = Flask(__name__, template_folder="../site/templates/", static_folder="../site/static/")
 
+# Load the environment variables
 load_dotenv()
+domain = os.getenv("DOMAIN_NAME")
 id = os.getenv("ASSISTANT_ID")
 eve = Assistant(id=id)
 
@@ -66,7 +69,8 @@ app.secret_key = os.getenv("CLIENT_SECRET")
 flow = InstalledAppFlow.from_client_secrets_file(
     "client_secret.json",
     scopes=["https://www.googleapis.com/auth/gmail.modify", "https://www.googleapis.com/auth/userinfo.profile", "https://www.googleapis.com/auth/userinfo.email", "openid"],
-    redirect_uri="https://personacorps.com/login/callback"
+    redirect_uri=f"https://" + domain + "/login/callback"
+    #redirect_uri="http://localhost:8000/login/callback" # for local dev
 )
 
 def login_is_required(function):
