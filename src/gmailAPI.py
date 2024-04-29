@@ -49,14 +49,16 @@ class GmailWrapper:
 
     def list_unread_emails(self):
         try:
-            results = self.service.users().messages().list(userId='me', q='is:unread').execute()
+            results = self.service.users().messages().list(
+                userId='me', q='is:unread').execute()
             messages = results.get('messages', [])
 
             if not messages:
                 print('No unread emails found.')
             else:
                 for message in messages:
-                    msg = self.service.users().messages().get(userId='me', id=message['id']).execute()
+                    msg = self.service.users().messages().get(
+                        userId='me', id=message['id']).execute()
                     message_data = msg['payload']['headers']
                     sender, subject = None, None
                     for data in message_data:
@@ -79,7 +81,7 @@ if __name__ == '__main__':
     to = 'dingjee7@gmail.com'
     subject = 'Test Email'
     message_body = 'This is a test email sent from the Gmail API.'
-    #gmail_wrapper.send_email(to, subject, message_body)
+    # gmail_wrapper.send_email(to, subject, message_body)
 
     # List unread emails
     gmail_wrapper.list_unread_emails()

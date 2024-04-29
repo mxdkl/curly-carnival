@@ -7,6 +7,7 @@ import azure.cognitiveservices.speech as speechsdk
 
 load_dotenv()
 
+
 def recognize_text_from_audio(downloadUrl) -> str:
     absolute_path = os.path.dirname(__file__)
     shutil.rmtree('downloads')
@@ -17,8 +18,8 @@ def recognize_text_from_audio(downloadUrl) -> str:
     except Exception as e:
         print(f"\nCould not download file {downloadUrl}")
         print(e)
-   
-    newAudioPath = filePath.replace('.oga','.wav')
+
+    newAudioPath = filePath.replace('.oga', '.wav')
     audioConvert = AudioSegment.from_file(filePath)
     try:
         audioConvert.export(newAudioPath, format='wav')
@@ -26,10 +27,12 @@ def recognize_text_from_audio(downloadUrl) -> str:
         print(f"\nCould not convert the audio file {filePath}")
         print(e)
 
-    speech_config = speechsdk.SpeechConfig(subscription=os.getenv('SPEECH_KEY'), region=os.getenv('SPEECH_REGION'))
-    speech_config.speech_recognition_language="en-US"
+    speech_config = speechsdk.SpeechConfig(subscription=os.getenv(
+        'SPEECH_KEY'), region=os.getenv('SPEECH_REGION'))
+    speech_config.speech_recognition_language = "en-US"
     audio_config = speechsdk.audio.AudioConfig(filename=newAudioPath)
-    speech_recognizer = speechsdk.SpeechRecognizer(speech_config=speech_config, audio_config=audio_config)
+    speech_recognizer = speechsdk.SpeechRecognizer(
+        speech_config=speech_config, audio_config=audio_config)
 
     speech_recognition_result = speech_recognizer.recognize_once_async().get()
 
@@ -37,13 +40,17 @@ def recognize_text_from_audio(downloadUrl) -> str:
         print("\nRecognized: {}".format(speech_recognition_result.text))
         return speech_recognition_result.text
     elif speech_recognition_result.reason == speechsdk.ResultReason.NoMatch:
-        print("No speech could be recognized: {}".format(speech_recognition_result.no_match_details))
+        print("No speech could be recognized: {}".format(
+            speech_recognition_result.no_match_details))
     elif speech_recognition_result.reason == speechsdk.ResultReason.Canceled:
         cancellation_details = speech_recognition_result.cancellation_details
-        print("Speech Recognition canceled: {}".format(cancellation_details.reason))
+        print("Speech Recognition canceled: {}".format(
+            cancellation_details.reason))
         if cancellation_details.reason == speechsdk.CancellationReason.Error:
-            print("Error details: {}".format(cancellation_details.error_details))
+            print("Error details: {}".format(
+                cancellation_details.error_details))
             print("Did you set the speech resource key and region values?")
+
 
 """ 
 url="https://do-media-7103.fra1.digitaloceanspaces.com/7103872531/7ccb69bf-ddda-4acd-bd7c-999a816997b7.oga"

@@ -4,6 +4,8 @@ import mysql.connector
 from time import sleep
 
 # Not a general database class. Scope is limited to this project.
+
+
 class Database:
     def __init__(self, max_retries=5, retry_interval=5):
         self.max_retries = max_retries
@@ -46,18 +48,21 @@ class Database:
                     exit(1)
 
     def searchDatabase(self, column, value):
-        self.mycursor.execute(f"SELECT * FROM Users WHERE {column} = '{value}'")
+        self.mycursor.execute(
+            f"SELECT * FROM Users WHERE {column} = '{value}'")
         rows = self.mycursor.fetchall()
         column_names = [desc[0] for desc in self.mycursor.description]
         rows = [dict(zip(column_names, row)) for row in rows]
         return rows
-    
+
     def registerPhoneNumber(self, user_id, phone_number, thread_id):
         # add new phone number to database
-        self.mycursor.execute(f"INSERT INTO Users (UserID, PhoneNumber, ThreadID) VALUES ('{user_id}', '{phone_number}', '{thread_id}')")
+        self.mycursor.execute(f"INSERT INTO Users (UserID, PhoneNumber, ThreadID) VALUES ('{
+                              user_id}', '{phone_number}', '{thread_id}')")
         self.mydb.commit()
 
     def registerEmail(self, user_id, user_name, email, gmail_token):
         # find row with user_id that matches and add user_name, email, and gmail_token
-        self.mycursor.execute(f"UPDATE Users SET UserName = '{user_name}', Email = '{email}', GmailToken = '{gmail_token}' WHERE UserID = '{user_id}'")
+        self.mycursor.execute(f"UPDATE Users SET UserName = '{user_name}', Email = '{
+                              email}', GmailToken = '{gmail_token}' WHERE UserID = '{user_id}'")
         self.mydb.commit()

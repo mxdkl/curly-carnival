@@ -16,7 +16,8 @@ import google.auth.transport.requests
 
 
 # Create the Flask app
-app = Flask(__name__, template_folder="../site/templates/", static_folder="../site/static/")
+app = Flask(__name__, template_folder="../site/templates/",
+            static_folder="../site/static/")
 
 # Load the environment variables
 load_dotenv()
@@ -37,19 +38,24 @@ def reply_whatsapp():
         sender_number = form_data["From"].split(":")[1]
         message = form_data["Body"]
         eve.processNewMessage(sender_number, message)
+        return "OK"
+    else:
+        return "No form data found"
 
 
 # -----------------------------------------
 # Static Website
 # -----------------------------------------
-        
+
 @app.route('/', methods=["GET"])
 def index():
     return render_template("index.html")
 
+
 @app.route("/register", methods=["GET"])
 def register():
     return render_template("register.html")
+
 
 @app.errorhandler(404)
 def not_found(error):
@@ -61,17 +67,20 @@ def not_found(error):
 # -----------------------------------------
 
 # uncomment to allow Http traffic, needed for gunicorn to work. its behind nginx so its fine
-os.environ["OAUTHLIB_INSECURE_TRANSPORT"] = "1" # to allow Http traffic for local dev
+# to allow Http traffic for local dev
+os.environ["OAUTHLIB_INSECURE_TRANSPORT"] = "1"
 
 app.secret_key = os.getenv("CLIENT_SECRET")
 
 # Configure OAuth
 flow = InstalledAppFlow.from_client_secrets_file(
     "client_secret.json",
-    scopes=["https://www.googleapis.com/auth/gmail.modify", "https://www.googleapis.com/auth/userinfo.profile", "https://www.googleapis.com/auth/userinfo.email", "openid"],
+    scopes=["https://www.googleapis.com/auth/gmail.modify", "https://www.googleapis.com/auth/userinfo.profile",
+            "https://www.googleapis.com/auth/userinfo.email", "openid"],
     redirect_uri=f"https://" + domain + "/login/callback"
-    #redirect_uri="http://localhost:8000/login/callback" # for local dev
+    # redirect_uri="http://localhost:8000/login/callback"  # for local dev
 )
+
 
 def login_is_required(function):
     def wrapper(*args, **kwargs):
@@ -92,6 +101,7 @@ def login():
     else:
         return render_template('app_login.html')
 
+
 @app.route("/login/<token>")
 def login_user(token):
     authorization_url, state = flow.authorization_url()
@@ -99,16 +109,19 @@ def login_user(token):
     session["token"] = token
     return redirect(authorization_url)
 
+
 @app.route("/login/callback")
 def callback():
     flow.fetch_token(authorization_response=request.url)
 
-    if not session["state"] == request.args["state"]: abort(500)
+    if not session["state"] == request.args["state"]:
+        abort(500)
 
     credentials = flow.credentials
     request_session = requests.session()
     cached_session = cachecontrol.CacheControl(request_session)
-    token_request = google.auth.transport.requests.Request(session=cached_session)
+    token_request = google.auth.transport.requests.Request(
+        session=cached_session)
 
     id_info = id_token.verify_oauth2_token(
         id_token=credentials._id_token,
@@ -120,14 +133,17 @@ def callback():
     session["name"] = id_info.get("name")
     session["email"] = id_info.get("email")
     creds = json.dumps(credentials._id_token)
-    eve.registerEmail(session["token"], session["name"], session["email"], creds)
+    eve.registerEmail(session["token"], session["name"],
+                      session["email"], creds)
 
     return redirect('/mailbox')
+
 
 @app.route("/mailbox")
 @login_is_required
 def mailbox():
     return f"Hello {session['email']}! <br/> <a href='/logout'><button>Logout</button></a>"
+
 
 @app.route("/logout")
 def logout():

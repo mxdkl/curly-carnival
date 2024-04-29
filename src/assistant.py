@@ -17,7 +17,8 @@ class Assistant(OpenAIWrapper, GmailWrapper, TwilioApiWrapper, Database):
         if id:
             self.id = id
         else:
-            self.id = self.createAssistant(name=name, description=description, instructions=instructions, model=model, tools=tools, files=files)
+            self.id = self.createAssistant(
+                name=name, description=description, instructions=instructions, model=model, tools=tools, files=files)
 
     def chat(self, thread_id, message: str, attachments: list = []):
         # Create message
@@ -35,8 +36,10 @@ class Assistant(OpenAIWrapper, GmailWrapper, TwilioApiWrapper, Database):
                         # Run function called by assistant
                         arguments = json.loads(tool_call.function.arguments)
                         function_name = tool_call.function.name
-                        self.service = self._create_gmail_service(self.searchDatabase("ThreadID", thread_id)[0]["GmailToken"])
-                        output = str(self._callFunctionByName(function_name, arguments))
+                        self.service = self._create_gmail_service(
+                            self.searchDatabase("ThreadID", thread_id)[0]["GmailToken"])
+                        output = str(self._callFunctionByName(
+                            function_name, arguments))
                         outputs.append({
                             "tool_call_id": tool_call.id,
                             "output": output
@@ -49,47 +52,47 @@ class Assistant(OpenAIWrapper, GmailWrapper, TwilioApiWrapper, Database):
 
             time.sleep(1)
             run = self._retrieveRun(thread_id, run.id)
-            
+
         # Retrieve assistant response
-        response = self.openai_client.beta.threads.messages.list(thread_id).data[0].content[0].text.value
+        response = self.openai_client.beta.threads.messages.list(
+            thread_id).data[0].content[0].text.value
         return response
 
-    def _createMessage(self, thread_id, message, file_ids = []):
+    def _createMessage(self, thread_id, message, file_ids=[]):
         thread_message = self.openai_client.beta.threads.messages.create(
             thread_id,
-            role = "user",
-            content = message,
-            file_ids = file_ids
+            role="user",
+            content=message,
+            attachments=file_ids
         )
         return thread_message
-    
+
     def _createThread(self):
         thread = self.openai_client.beta.threads.create()
         return thread.id
 
-    
     def _createRun(self, thread_id):
         run = self.openai_client.beta.threads.runs.create(
-            thread_id = thread_id,
-            assistant_id = self.id
+            thread_id=thread_id,
+            assistant_id=self.id
         )
         return run
-    
+
     def _retrieveRun(self, thread_id, run_id):
         run = self.openai_client.beta.threads.runs.retrieve(
-            thread_id = thread_id,
-            run_id = run_id
+            thread_id=thread_id,
+            run_id=run_id
         )
         return run
-    
+
     def _submitRunToolOutput(self, thread_id, run_id, outputs):
         run = self.openai_client.beta.threads.runs.submit_tool_outputs(
-            thread_id = thread_id,
-            run_id = run_id,
-            tool_outputs = outputs
+            thread_id=thread_id,
+            run_id=run_id,
+            tool_outputs=outputs
         )
         return run
-    
+
     def _callFunctionByName(self, function_name, arguments):
         if hasattr(self, function_name) and callable(getattr(self, function_name)):
             func = getattr(self, function_name)
@@ -106,12 +109,13 @@ class Assistant(OpenAIWrapper, GmailWrapper, TwilioApiWrapper, Database):
         self.registerPhoneNumber(user_id, sender, thread_id)
 
         # Send welcome login message
-        self.sendMessage(sender, "Welcome to Persona Corps! Please register your email to continue. https://personacorps.com/login/" + user_id)
+        self.sendMessage(
+            sender, "Welcome to Persona Corps! Please register your email to continue. https://personacorps.com/login/" + user_id)
 
     def processNewMessage(self, sender, message):
         print(f"New message from {sender}: {message}")
         result = self.searchDatabase("PhoneNumber", sender)
-        
+
         # if no numer is found, call newUserOnboard
         # if a number is found but no email is found do nothing
         # if a number and email is found, call chat
@@ -123,8 +127,10 @@ class Assistant(OpenAIWrapper, GmailWrapper, TwilioApiWrapper, Database):
         elif "PhoneNumber" in result[0] and "Email" in result[0] and "ThreadID" in result[0]:
             thread_id = result[0]["ThreadID"]
             response = self.chat(thread_id, message)
+            print(f"Response to {sender}: {response}")
             self.sendMessage(sender, response)
-    
+
+
 if __name__ == "__main__":
     # Create an assistant
     name = "Eve, Personal Assistant"
