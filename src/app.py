@@ -24,7 +24,7 @@ app = Flask(__name__, template_folder="../site/templates/",
 
 # Load the environment variables
 load_dotenv()
-domain = os.getenv("DOMAIN_NAME")
+URI = os.getenv("URI")
 id = os.getenv("ASSISTANT_ID")
 eve = Assistant(id=id)
 
@@ -77,7 +77,6 @@ os.environ["OAUTHLIB_INSECURE_TRANSPORT"] = "1"
 
 app.secret_key = "??89tnuv2v89tvu29084tun0298utnv0298ty2n?>W<@E<@:LE"
 
-URI = os.getenv("URI")
 SCOPES = [
     "https://www.googleapis.com/auth/gmail.readonly",
     "https://www.googleapis.com/auth/gmail.compose",
