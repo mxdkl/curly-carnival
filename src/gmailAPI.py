@@ -14,7 +14,13 @@ class GmailWrapper:
         self.service = None
 
     def _create_gmail_service(self, credentials_info=None):
-        SCOPES = ["https://www.googleapis.com/auth/gmail.modify"]
+        SCOPES = [
+            "https://www.googleapis.com/auth/gmail.readonly",
+            "https://www.googleapis.com/auth/gmail.compose",
+            "https://www.googleapis.com/auth/userinfo.email",
+            "https://www.googleapis.com/auth/userinfo.profile",
+            "openid"
+        ]
 
         creds = None
         creds = Credentials.from_authorized_user_info(credentials_info, SCOPES)

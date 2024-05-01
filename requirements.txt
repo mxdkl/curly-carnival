@@ -1,20 +1,21 @@
 # Gmail + Oauth
 google-api-python-client
-google-auth-httplib2
-google-auth-oauthlib
 google-auth
-requests-oauthlib
-cachecontrol
+google-auth-oauthlib
+google-auth-httplib2
 
 # Web
 Flask
 gunicorn
+requests
+wget
+pyjwt
 
 # Whatsapp
 twilio
 whatsapp-api-client-python
 
-# openai
+# OpenAI
 openai
 
 # MYSQL
@@ -23,5 +24,4 @@ mysql-connector-python
 # Other
 azure-cognitiveservices-speech
 python-dotenv
-wget
 pydub

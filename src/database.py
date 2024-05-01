@@ -64,5 +64,5 @@ class Database:
     def registerEmail(self, user_id, user_name, email, gmail_token):
         # find row with user_id that matches and add user_name, email, and gmail_token
         self.mycursor.execute(f"""UPDATE Users SET UserName = '{user_name}', Email = '{
-                              email}', GmailToken = '{gmail_token}' WHERE UserID = '{user_id}'""")
+                              email}', GmailData = '{gmail_token}' WHERE UserID = '{user_id}'""")
         self.mydb.commit()

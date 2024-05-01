@@ -10,6 +10,8 @@ services:
             - src/.env
         depends_on:
             - mysql
+        dns:
+            - 1.1.1.1
 
     mysql:
         image: docker.io/mysql:latest
