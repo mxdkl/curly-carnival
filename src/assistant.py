@@ -70,21 +70,25 @@ class Assistant(OpenAIWrapper, GmailWrapper, TwilioApiWrapper, Database):
             run = self._retrieveRun(thread_id, run.id)
 
         # Run assistant functions
-        outputs = []
-        for tool in run.required_action.submit_tool_outputs.tool_calls:
-            if tool.type == "function":
-                arguments = json.loads(tool.function.arguments)
-                arguments["credentials_json"] = self.searchDatabase(
-                    "ThreadID", thread_id)[0]["GmailData"]
-                function_name = tool.function.name
-                output = self._callFunctionByName(function_name, arguments)
-                outputs.append({
-                    "tool_call_id": tool.id,
-                    "output": output
-                })
+        if run.status == "requires_action":
+            outputs = []
+            for tool in run.required_action.submit_tool_outputs.tool_calls:
+                if tool.type == "function":
+                    arguments = json.loads(tool.function.arguments)
+                    arguments["credentials_json"] = self.searchDatabase(
+                        "ThreadID", thread_id)[0]["GmailData"]
+                    function_name = tool.function.name
+                    output = self._callFunctionByName(function_name, arguments)
+                    outputs.append({
+                        "tool_call_id": tool.id,
+                        "output": output
+                    })
         
-        # Submit assistant function outputs
-        self._submitRunToolOutput(thread_id, run.id, outputs)
+            # Submit assistant function outputs
+            self._submitRunToolOutput(thread_id, run.id, outputs)
+
+        # Retrieve assistant response  
+        run = self._retrieveRun(thread_id, run.id)
 
         # Retrieve assistant response
         response = self.openai_client.beta.threads.messages.list(
