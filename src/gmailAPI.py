@@ -21,13 +21,13 @@ class GmailWrapper:
         
     # Public Methods
 
-    def send_email(self, to, subject, message, credentials_json):
+    def send_email(self, to, subject, body, credentials_json):
         service = self._authenticate(credentials_json)
 
         if service is None:
             return None
 
-        message = MIMEText(message)
+        message = MIMEText(body)
         message['to'] = to
         message['subject'] = subject
         message = urlsafe_b64encode(message.as_bytes()).decode()
@@ -44,7 +44,8 @@ class GmailWrapper:
 
     def _authenticate(self, credentials_json):
         # take credentials from google oauth2 and create a service object
-        creds = Credentials.from_authorized_user_info(credentials_json)
+        creds = json.loads(credentials_json)
+        creds = Credentials.from_authorized_user_info(creds)
 
         if not creds or not creds.valid:
             if creds and creds.expired and creds.refresh_token:
