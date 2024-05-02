@@ -30,63 +30,33 @@ class Assistant(OpenAIWrapper, GmailWrapper, TwilioApiWrapper, Database):
         # Run assistant
         run = self._createRun(thread_id)
 
-        # Wait for assistant to finish. This code jank af
-        '''
-        while run.status != "completed":
-            if run.status == "requires_action":
-                outputs = []
-                for tool_call in run.required_action.submit_tool_outputs.tool_calls:
-                    if tool_call.type == "function":
-                        # Run function called by assistant
-                        arguments = json.loads(tool_call.function.arguments)
-                        function_name = tool_call.function.name
-                        self.service = self._create_gmail_service(
-                            self.searchDatabase("ThreadID", thread_id)[0]["GmailToken"])
-                        output = str(self._callFunctionByName(
-                            function_name, arguments))
-                        outputs.append({
-                            "tool_call_id": tool_call.id,
-                            "output": output
-                        })
-                        self.service = None
-                self._submitRunToolOutput(thread_id, run.id, outputs)
-            elif run.status == "failed" or run.status == "cancelled":
-                print("Error occurred while running assistant.")
-                return
-
-            time.sleep(1)
-            run = self._retrieveRun(thread_id, run.id)
-
-        '''
-
-        # Rewrite the code above to be more readable
-
         # Wait for assistant to finish
         while run.status != "completed":
             if run.status == "failed" or run.status == "cancelled":
                 print("Error occurred while running assistant.")
                 return
+            
+            # Run assistant functions
+            if run.status == "requires_action":
+                outputs = []
+                for tool in run.required_action.submit_tool_outputs.tool_calls:
+                    if tool.type == "function":
+                        arguments = json.loads(tool.function.arguments)
+                        arguments["credentials_json"] = self.searchDatabase(
+                            "ThreadID", thread_id)[0]["GmailData"]
+                        function_name = tool.function.name
+                        output = self._callFunctionByName(function_name, arguments)
+                        outputs.append({
+                            "tool_call_id": tool.id,
+                            "output": output
+                        })
+
+                # Submit assistant function outputs
+                self._submitRunToolOutput(thread_id, run.id, outputs)
+
             time.sleep(1)
             run = self._retrieveRun(thread_id, run.id)
-
-        # Run assistant functions
-        if run.status == "requires_action":
-            outputs = []
-            for tool in run.required_action.submit_tool_outputs.tool_calls:
-                if tool.type == "function":
-                    arguments = json.loads(tool.function.arguments)
-                    arguments["credentials_json"] = self.searchDatabase(
-                        "ThreadID", thread_id)[0]["GmailData"]
-                    function_name = tool.function.name
-                    output = self._callFunctionByName(function_name, arguments)
-                    outputs.append({
-                        "tool_call_id": tool.id,
-                        "output": output
-                    })
         
-            # Submit assistant function outputs
-            self._submitRunToolOutput(thread_id, run.id, outputs)
-
         # Retrieve assistant response  
         run = self._retrieveRun(thread_id, run.id)
 
