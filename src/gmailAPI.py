@@ -19,6 +19,7 @@ class GmailWrapper:
             "https://www.googleapis.com/auth/userinfo.email"
         ]
         
+
     # Public Methods
 
     def send_email(self, to, subject, body, credentials_json):
@@ -35,11 +36,12 @@ class GmailWrapper:
 
         try:
             message = service.users().messages().send(userId='me', body=body).execute()
-            return message
+            return "True"
         except HttpError as error:
             print(f'An error occurred: {error}')
+            return "False"
 
-
+    
     # Private Methods
 
     def _authenticate(self, credentials_json):

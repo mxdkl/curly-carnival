@@ -48,7 +48,7 @@ class Assistant(OpenAIWrapper, GmailWrapper, TwilioApiWrapper, Database):
                         output = self._callFunctionByName(function_name, arguments)
                         outputs.append({
                             "tool_call_id": tool.id,
-                            "output": output
+                            "output": "True"
                         })
 
                 # Submit assistant function outputs
@@ -65,7 +65,7 @@ class Assistant(OpenAIWrapper, GmailWrapper, TwilioApiWrapper, Database):
             thread_id).data[0].content[0].text.value
         return response
     
-    def processNewMessage(self, sender, message):
+    def processNewMessage(self, sender, name, message):
         print(f"New message from {sender}: {message}")
         result = self.searchDatabase("PhoneNumber", sender)
 
@@ -74,7 +74,7 @@ class Assistant(OpenAIWrapper, GmailWrapper, TwilioApiWrapper, Database):
         # if a number and email is found, call chat
 
         if len(result) == 0 or ("PhoneNumber" not in result[0]):
-            self._newUserOnboard(sender)
+            self._newUserOnboard(sender, name)
         elif "PhoneNumber" in result[0] and "Email" not in result[0]:
             pass
         elif "PhoneNumber" in result[0] and "Email" in result[0] and "ThreadID" in result[0]:
@@ -90,6 +90,8 @@ class Assistant(OpenAIWrapper, GmailWrapper, TwilioApiWrapper, Database):
         # Create new thread and user id
         thread_id = self._createThread()
         user_id = str(uuid.uuid4())
+
+        self._createMessage(thread_id=thread_id, message="Hello Eve! My name is " + sender + ".")
 
         # Add user to database
         self.registerPhoneNumber(user_id, sender, thread_id)
@@ -137,6 +139,7 @@ class Assistant(OpenAIWrapper, GmailWrapper, TwilioApiWrapper, Database):
     def _callFunctionByName(self, function_name, arguments):
         if hasattr(self, function_name) and callable(getattr(self, function_name)):
             func = getattr(self, function_name)
-            func(**arguments)
+            return func(**arguments)
         else:
             print(f"Function '{function_name}' not found.")
+            return "Function not found."

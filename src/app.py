@@ -43,7 +43,7 @@ def reply_whatsapp():
         sender_name = form_data["ProfileName"]
         sender_number = form_data["From"].split(":")[1]
         message = form_data["Body"]
-        eve.processNewMessage(sender_number, message)
+        eve.processNewMessage(sender_number, sender_name, message)
         return "OK"
     else:
         return "No form data found"
