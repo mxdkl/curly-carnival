@@ -86,12 +86,12 @@ class Assistant(OpenAIWrapper, GmailWrapper, TwilioApiWrapper, Database):
 
     # Private Methods
 
-    def _newUserOnboard(self, sender):
+    def _newUserOnboard(self, sender, name):
         # Create new thread and user id
         thread_id = self._createThread()
         user_id = str(uuid.uuid4())
 
-        self._createMessage(thread_id=thread_id, message="Hello Eve! My name is " + sender + ".")
+        self._createMessage(thread_id=thread_id, message="Hello Eve! My name is " + name + ".")
 
         # Add user to database
         self.registerPhoneNumber(user_id, sender, thread_id)
