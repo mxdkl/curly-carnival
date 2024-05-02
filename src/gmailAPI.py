@@ -1,6 +1,8 @@
 import os.path
+import json
 from email.mime.text import MIMEText
 from base64 import urlsafe_b64encode
+
 from google.auth.transport.requests import Request
 from google.oauth2.credentials import Credentials
 from google_auth_oauthlib.flow import InstalledAppFlow
@@ -9,85 +11,48 @@ from googleapiclient.errors import HttpError
 
 
 class GmailWrapper:
-    def __init__(self):
-        self.client_secret_file = 'client_secret.json'
-        self.service = None
-
-    def _create_gmail_service(self, credentials_info=None):
-        SCOPES = [
+    def __init__(self, client_secret_file='client_secret.json'):
+        self.client_secret_file = client_secret_file
+        self.scopes = [
             "https://www.googleapis.com/auth/gmail.readonly",
             "https://www.googleapis.com/auth/gmail.compose",
-            "https://www.googleapis.com/auth/userinfo.email",
-            "https://www.googleapis.com/auth/userinfo.profile",
-            "openid"
+            "https://www.googleapis.com/auth/userinfo.email"
         ]
+        
+    # Public Methods
 
-        creds = None
-        creds = Credentials.from_authorized_user_info(credentials_info, SCOPES)
+    def send_email(self, to, subject, message, credentials_json):
+        service = self._authenticate(credentials_json)
+
+        if service is None:
+            return None
+
+        message = MIMEText(message)
+        message['to'] = to
+        message['subject'] = subject
+        message = urlsafe_b64encode(message.as_bytes()).decode()
+        body = {'raw': message}
+
+        try:
+            message = service.users().messages().send(userId='me', body=body).execute()
+            return message
+        except HttpError as error:
+            print(f'An error occurred: {error}')
+
+
+    # Private Methods
+
+    def _authenticate(self, credentials_json):
+        # take credentials from google oauth2 and create a service object
+        creds = Credentials.from_authorized_user_info(credentials_json)
 
         if not creds or not creds.valid:
             if creds and creds.expired and creds.refresh_token:
                 creds.refresh(Request())
             else:
-                # Expired or non-existent credentials
-                # TODO: Handle this case
-                pass
-
-        return build('gmail', 'v1', credentials=creds)
-
-    def send_email(self, to, subject, body):
-        message = self._create_message(to, subject, body)
-        try:
-            self.service.users().messages().send(userId='me', body=message).execute()
-            print("Email sent successfully.")
-            return True
-        except HttpError as e:
-            print(f"An error occurred: {str(e)}")
-            return False
-
-    def _create_message(self, to, subject, body):
-        message = MIMEText(body)
-        message['to'] = to
-        message['subject'] = subject
-
-        raw_message = urlsafe_b64encode(message.as_bytes()).decode('utf-8')
-        return {'raw': raw_message}
-
-    def list_unread_emails(self):
-        try:
-            results = self.service.users().messages().list(
-                userId='me', q='is:unread').execute()
-            messages = results.get('messages', [])
-
-            if not messages:
-                print('No unread emails found.')
-            else:
-                for message in messages:
-                    msg = self.service.users().messages().get(
-                        userId='me', id=message['id']).execute()
-                    message_data = msg['payload']['headers']
-                    sender, subject = None, None
-                    for data in message_data:
-                        if data['name'] == 'From':
-                            sender = data['value']
-                        if data['name'] == 'Subject':
-                            subject = data['value']
-                    if sender and subject:
-                        print(f'From: {sender}\nSubject: {subject}\n')
-
-        except HttpError as e:
-            print(f"An error occurred: {str(e)}")
-
-
-if __name__ == '__main__':
-    credentials_file = 'token.json'
-    gmail_wrapper = GmailWrapper(credentials_file)
-
-    # Sending an email
-    to = 'dingjee7@gmail.com'
-    subject = 'Test Email'
-    message_body = 'This is a test email sent from the Gmail API.'
-    # gmail_wrapper.send_email(to, subject, message_body)
-
-    # List unread emails
-    gmail_wrapper.list_unread_emails()
+                print('Credentials are invalid or missing')
+                return None
+    
+        
+        service = build('gmail', 'v1', credentials=creds)
+        return service

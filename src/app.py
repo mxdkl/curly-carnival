@@ -37,6 +37,7 @@ eve = Assistant(id=id)
 
 @app.route("/webhook", methods=["POST"])
 def reply_whatsapp():
+    print("Received a message")
     form_data = request.form
     if form_data:
         sender_name = form_data["ProfileName"]
