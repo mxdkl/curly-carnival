@@ -4,3 +4,7 @@ main.container {margin-top:5rem;}
 .login-btns a.btn span{margin-left:3.2rem; display:inline-block; width: 12rem;}
 .login-btns i.bi{margin-right: 0.4rem;}
 .riding-on-hr span{display:block; position: absolute; left:50%; margin:-1rem 0 0 -0.2rem; padding: 0.2rem;color:gray; background-color:white; z-index: 1;}
+.no-underline{text-decoration: none;}
+.textarea{display:block; padding: 1.5rem 0.7rem;}
+.textarea[contenteditable]:empty::before {content: "Content"; color: #212529; font-size:1rem;}
+.

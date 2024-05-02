@@ -1,6 +1,5 @@
 {% extends "app_layout.html" %}
 {% block content %}
-<main class="container">
   <div class="alert alert-primary" role="alert">
       If you don't want to link new email account, you can close this page.
   </div>
@@ -13,7 +12,7 @@
           <div>
               <h1>Link your email account.</h1>
               <p>If you want to have the best experience with Eve, this is the way we most recommend it.</p>
-              <div class="login-btns d-flex flex-column">
+              <div class="login-btns d-grid gap-2">
                   <a class="btn btn-outline-primary focus-ring fw-medium" href="{{authorization_url}}" type="submit"><span class="text-start"><i class="bi bi-google"></i>Log in with Google</span></a>
                   <a class="btn btn btn-outline-primary focus-ring fw-medium" href="#" type="submit"><span class="text-start"><i class="bi bi-microsoft"></i>Log in with Microsoft</span></a>
                   <a class="btn btn btn-outline-primary focus-ring fw-medium" href="#" type="submit"><span class="text-start"><i class="bi bi-apple"></i>Log in with Apple</span></a>
@@ -34,7 +33,7 @@
                               <form>
                                   <div class="mb-3">
                                       <p class="form-text">The forwarding email address will be associated with your WhatsApp account.</p>
-                                      <input type="email" class="form-control" id="exampleInputEmail1" aria-describedby="emailHelp" placeholder="Input your email address">
+                                      <input type="email" class="form-control" id="exampleInputEmail1" aria-describedby="emailHelp" placeholder="Input your email address" />
                                   </div>
                                   <button type="submit" class="btn btn-primary">Submit</button>
                               </form>
@@ -65,5 +64,4 @@
           </div>
       </div>
   </div>
-</main>
 {% endblock %}
