@@ -23,33 +23,68 @@
     </div>
 </nav>
 <main class="container">
-    <form class="d-grid gap-2">
-        <div>
-            <a class="no-underline" href="#"><i class="bi bi-fonts"></i></a>
-            <a class="no-underline" href="#"><i class="bi bi-three-dots-vertical"></i></a>
-            <a class="no-underline" href="#"><i class="bi bi-paperclip"></i></a>
-            <button class="btn btn-outline-primary" type="submit"><i class="bi bi-send"></i>Send</button>
+    <nav class="container">
+        <div class="btn-group">
+            <a href="/drafts" class="btn btn-outline-primary active" aria-current="page">Drafts</a>
+            <a href="#" class="btn btn-outline-primary">Outbox</a>
+            <a href="#" class="btn btn-outline-primary">Settings</a>
         </div>
-        <div class="form-floating mb-1">
-            <input type="email" class="form-control" id="toInput" placeholder="name@example.com">
-            <label for="toInput">To</label>
-            <a class="no-underline" href="#">CC/BCC</a>
+    </nav>
+    <div class="row">
+        <div class="col d-none d-lg-block">
+            <ul class="list-group">
+                <li class="list-group-item d-flex justify-content-between align-items-start">
+                    <div class="ms-2 me-auto">
+                        <div class="fw-bold">Subheading</div>
+                        Content for list item
+                    </div>
+                    <span class="badge text-bg-primary rounded-pill">14</span>
+                </li>
+                <li class="list-group-item">A second item</li>
+                <li class="list-group-item">A third item</li>
+                <li class="list-group-item">A fourth item</li>
+                <li class="list-group-item">And a fifth one</li>
+            </ul>
         </div>
-        <div class="form-floating mb-1">
-            <input type="email" class="form-control" id="ccInput" placeholder="name@example.com">
-            <label for="toInput">CC</label>
+        <div class="col">
+            <form class="d-grid gap-2">
+                <div class="d-flex justify-content-between">
+                    <a class="no-underline" href="#"><i class="bi bi-fonts"></i></a>
+                    <a class="no-underline" href="#"><i class="bi bi-three-dots-vertical"></i></a>
+                    <a class="no-underline" href="#"><i class="bi bi-paperclip"></i></a>
+                    <div class="dropdown">
+                        <button class="btn btn-outline-primary dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false">myemail@example.com</button>
+                        <ul class="dropdown-menu">
+                            <li><a class="dropdown-item" href="#">another@example.com</a></li>
+                        </ul>
+                    </div>
+                    <button class="btn btn-outline-primary" type="submit"><i class="bi bi-send"></i>Send</button>
+                </div>
+                <div class="form-floating mb-1">
+                    <input type="email" class="form-control" id="toInput" placeholder="name@example.com" />
+                    <span class="badge bg-secondary">receiver@example.com</span>
+                    <label for="toInput">To</label>
+                    <button class="btn btn-link no-underline" type="button" data-bs-toggle="collapse" data-bs-target="#cc&bcc" aria-expanded="false" aria-controls="cc&bcc" >CC/BCC</button>
+                </div>
+                <div class="collapse" id="cc&bcc">
+                    <div class="form-floating mb-1">
+                        <input type="email" class="form-control" id="ccInput" placeholder="name@example.com">
+                        <label for="toInput">CC</label>
+                    </div>
+                    <div class="form-floating mb-1">
+                        <input type="email" class="form-control" id="bccInput" placeholder="name@example.com">
+                        <label for="toInput">BCC</label>
+                    </div>
+                </div>
+                <div class="form-floating">
+                    <input type="email" class="form-control" id="subjectInput" placeholder="name@example.com">
+                    <label for="subjectInput">Subject</label>
+                </div>
+                <hr />
+
+                <span id="contentInput" role="textbox" class="form-control textarea" contenteditable="true" aria-multiline="true" aria-required="true"></span>
+            </form>
         </div>
-        <div class="form-floating mb-1">
-            <input type="email" class="form-control" id="ccInput" placeholder="name@example.com">
-            <label for="toInput">BCC</label>
-        </div>
-        <div class="form-floating">
-            <input type="email" class="form-control" id="subjectInput" placeholder="name@example.com">
-            <label for="subjectInput">Subject</label>
-        </div>
-        <hr />
-        <span role="textbox" class="form-control textarea" contenteditable="true" aria-multiline="true" aria-required="true"></span>
-    </form>
 </main>
 
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js" integrity="sha384-C6RzsynM9kWDrMNeT87bh95OGNyZPhcTNXj1NW7RuBCsyN/o0jlpcV8Qyq46cDfL" crossorigin="anonymous"></script>
